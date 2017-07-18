@@ -1,0 +1,80 @@
+- name: configure apache
+  become: true
+  handlers:
+    - name: restart apache
+      service:
+        name: apache2
+        state: restarted
+  hosts: all
+  tasks:
+    - name: check which sites have certs installed
+      stat:
+        path: '/etc/letsencrypt/live/{{item.key}}'
+      register: enabledLetsEncryptStats
+      when: item.value.https is defined and item.value.https
+      with_dict: '{{sites}}'
+    ##--make letsencrypt cert installed check easier to use in templates
+    - name: format letsencrypt cert data for consumption
+      set_fact:
+        letsEncryptSiteStatus: '{{letsEncryptSiteStatus|default({})|combine({item.item.key: item.stat.exists})}}'
+      when: item.stat is defined
+      with_items: '{{enabledLetsEncryptStats.results}}'
+    - name: enable mod_headers
+      apache2_module:
+        name: headers
+        state: present
+      register: _apacheConfHeadersEnabledResult
+    - name: enable mod_rewrite
+      apache2_module:
+        name: rewrite
+        state: present
+      register: _apacheConfRewriteEnabledResult
+    - name: enable mod_ssl
+      apache2_module:
+        name: ssl
+        state: present
+      register: _apacheConfSSLEnabledResult
+    - name: mod_ssl conf
+      copy:
+        dest: /etc/apache2/mods-available/ssl.conf
+        src: ../../assets/etc/apache2/mods-available/ssl.conf
+      register: _apacheConfSSLConfResult
+    - name: copy default site conf
+      copy:
+        dest: /etc/apache2/sites-enabled/000-default.conf
+        src: ../../assets/etc/apache2/sites-enabled/000-default.conf
+      register: _apacheConfDefaultSiteResult
+    - name: create apache inc directory
+      file:
+        path: /etc/apache2/inc
+        state: directory
+    - name: create site inc conf files
+      template:
+        dest: /etc/apache2/inc/{{item.key}}.conf
+        src: ../../assets/etc/apache2/inc/site.conf.j2
+      register: _apacheConfIncResult
+      with_dict: '{{ sites }}'
+    - name: create apache vhosts
+      template:
+        dest: /etc/apache2/sites-enabled/{{item.key}}.conf
+        src: ../../assets/etc/apache2/sites-enabled/site.conf.j2
+      register: _apacheConfVhostsResult
+      with_dict: '{{sites}}'
+    - name: restart apache
+      command: 'apachectl configtest'
+      when: _apacheConfHeadersEnabledResult.changed or _apacheConfRewriteEnabledResult.changed or _apacheConfSSLEnabledResult.changed or _apacheConfSSLConfResult or _apacheConfDefaultSiteResult.changed or _apacheConfIncResult.changed or _apacheConfVhostsResult.changed
+      notify: restart apache
+- name: configure mysql
+  become: true
+  hosts: all
+  tasks:
+    - name: set root mysql password
+      mysql_user:
+        name: root
+        password: '{{dbRootPassword}}'
+        state: present
+    - name: add root my.cnf for future logins
+      template:
+        dest: /root/.my.cnf
+        mode: 0600
+        src: ../../assets/root/.my.cnf

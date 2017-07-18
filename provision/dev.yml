@@ -1,0 +1,9 @@
+- name: vars
+  hosts: all
+  tasks:
+    - name: set server facts
+      set_fact:
+        dbRootPassword: '!!12345'
+        tmcomDBPassword: '!!12345'
+        tmcomEnv: dev
+- include: plays/main.yml

@@ -1,0 +1,27 @@
+fw_allow:
+  - { port: 22, proto: tcp }
+  - { port: 80, proto: tcp }
+  - { port: 443, proto: tcp }
+sites:
+  tobymackenzie.com:
+    aliases:
+      - www.tobymackenzie.com
+    https: true
+    webroot: /web/
+  dev.tobymackenzie.com:
+    https: true
+    webroot: /
+  me.tobymackenzie.com:
+    redirect: 'www.tobymackenzie.com'
+  personal.tobymackenzie.com:
+    redirect: 'www.tobymackenzie.com'
+  webd.tobymackenzie.com:
+    redirect: 'www.tobymackenzie.com'
+  tobymackenzie.name:
+    aliases:
+      - www.tobymackenzie.name
+    redirect: 'www.tobymackenzie.com'
+tmKey: 'ssh-rsa !!12345 admin@tobymackenzie.com'
+tmcomEnv: 'prod'
+workKey: 'ssh-rsa !!12345 admin@tobymackenzie.com'
+workUser: wrk

@@ -1,0 +1,47 @@
+#-@ https://ryaneschinger.com/blog/securing-a-server-with-ansible/
+- name: secure server
+  become: true
+  handlers:
+    - name: restart ssh
+      service:
+        name: ssh
+        state: restarted
+  hosts: all
+  tasks:
+    - name: disallow root ssh
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        line: 'PermitRootLogin no'
+        regexp: '^PermitRootLogin'
+        state: present
+      notify: restart ssh
+    - name: prevent ssh password auth
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        line: 'PasswordAuthentication no'
+        regexp: '^PasswordAuthentication'
+        state: present
+      notify: restart ssh
+    - name: install security packages
+      apt:
+        name: '{{item}}'
+        state: present
+      with_items:
+        - fail2ban
+        - ufw
+        - unattended-upgrades
+    - name: configure apt update intervals
+      copy:
+        dest: '/etc/apt/apt.conf.d/10periodic'
+        src: '../../assets/etc/apt/apt.conf.d/10periodic'
+    - name: block all ports by default
+      ufw:
+        policy: deny
+        state: enabled
+    - name: configure allowed ports
+      ufw:
+        port: '{{item.port}}'
+        proto: '{{item.proto}}'
+        rule: allow
+      with_items:
+        - '{{fw_allow}}'

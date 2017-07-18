@@ -1,0 +1,24 @@
+ServerName {{item.key}}
+{% if item.value.aliases is defined %}
+{%	for alias in item.value.aliases %}
+ServerAlias {{alias}}
+{%	endfor %}
+{% endif %}
+{% if item.value.redirect is defined %}
+<IfModule mod_rewrite.c>
+	RewriteEngine on
+	RewriteRule ^ %{REQUEST_SCHEME}://{{item.value.redirect}}%{REQUEST_URI} [NC,L,QSA,R=302]
+</IfModule>
+{% else %}
+#==docroot
+DocumentRoot /var/www/sites/{{item.key}}{{item.value.webroot|default('/')}}
+<Directory "/var/www/sites/{{item.key}}{{item.value.webroot|default('/')}}">
+	AllowOverride All AuthConfig
+	Options FollowSymLinks Indexes MultiViews
+	Order allow,deny
+	allow from all
+</Directory>
+#==logs
+{% endif %}
+CustomLog ${APACHE_LOG_DIR}/{{item.key}}-log combined
+ErrorLog ${APACHE_LOG_DIR}/{{item.key}}-error_log

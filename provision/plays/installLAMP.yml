@@ -1,0 +1,59 @@
+- name: install lamp
+  become: true
+  hosts: all
+  tasks:
+    - name: install apache
+      apt:
+        name: '{{item}}'
+        state: present
+      with_items:
+        - apache2
+        - libapache2-mod-php7.0
+    - name: install mysql
+      apt:
+        name: '{{item}}'
+        state: present
+      with_items:
+        - mysql-client
+        - mysql-server
+        - php7.0-mysql
+        - python-mysqldb #--for mysql_user module
+    - name: install php
+      apt:
+        name: '{{item}}'
+        state: present
+      with_items:
+        - php7.0
+        - php7.0-curl
+        - php7.0-intl
+        - php7.0-mbstring
+        - php7.0-mysql
+        - php7.0-xml
+        - php7.0-zip #-- for composer
+    - name: check composer's existence
+      stat:
+        path: '/usr/local/bin/composer'
+      register: isComposerInstalled
+    - name: get composer
+      get_url:
+        dest: /tmp/composerInstall
+        url: https://getcomposer.org/installer
+      when: isComposerInstalled.stat.exists != true
+    - name: build composer
+      become: ubuntu #--limited privileges
+      command: 'php /tmp/composerInstall --filename=composer --install-dir=/tmp'
+      when: isComposerInstalled.stat.exists != true
+    - name: install composer
+      command: 'mv /tmp/composer /usr/local/bin/composer'
+      when: isComposerInstalled.stat.exists != true
+    - name: clean composer installation
+      file:
+        path: /tmp/composerInstall
+        state: absent
+      when: isComposerInstalled.stat.exists != true
+    - name: set composer permissions
+      file:
+        group: ubuntu #--allow limited privilege updates
+        mode: 0775
+        owner: root
+        path: /usr/local/bin/composer

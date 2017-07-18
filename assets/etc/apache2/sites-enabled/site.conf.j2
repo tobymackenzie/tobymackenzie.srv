@@ -1,0 +1,13 @@
+<VirtualHost *:80>
+	Include inc/{{item.key}}.conf
+</VirtualHost>
+{% if letsEncryptSiteStatus[item.key] is defined and letsEncryptSiteStatus[item.key] %}
+<IfModule mod_ssl.c>
+	<VirtualHost *:443>
+		Include inc/{{item.key}}.conf
+		SSLEngine on
+		SSLCertificateFile /etc/letsencrypt/live/{{item.key}}/fullchain.pem
+		SSLCertificateKeyFile /etc/letsencrypt/live/{{item.key}}/privkey.pem
+	</VirtualHost>
+</IfModule>
+{% endif %}

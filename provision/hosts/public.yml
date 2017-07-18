@@ -1,0 +1,14 @@
+all:
+  hosts:
+    tobymackenzie.com:
+      ansible_user: ubuntu
+  vars:
+    dbRootPassword: '!!12345'
+    tmcomDBPassword: '!!12345'
+    tmcomEnv: prod
+prod:
+  hosts:
+    tobymackenzie.com:
+public:
+  hosts:
+    tobymackenzie.com:

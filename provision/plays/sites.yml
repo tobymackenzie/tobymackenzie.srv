@@ -1,0 +1,80 @@
+- name: copy sites
+  become: true
+  hosts: prod
+  tasks:
+    - name: copy sites
+      synchronize:
+        delete: yes
+        dest: /var/www/sites/
+        group: no
+        links: yes
+        owner: no
+        perms: yes
+        recursive: yes
+        rsync_opts:
+          - '--copy-unsafe-links'
+          - '--exclude-from={{inventory_dir}}/../sync/sites.exclude'
+        src: ../../sites/
+        times: yes
+- name: site permissions
+  become: true
+  hosts: all
+  tasks:
+    - name: site permissions
+      file:
+        group: ubuntu
+        mode: 0755
+        owner: ubuntu
+        path: /var/www/sites
+        recurse: true
+- name: prepare tmcom
+  become: ubuntu
+  #-!! env stuff should be handled elsewhere
+  environment:
+    SYMFONY_ENV: '{{tmcomEnv}}'
+  hosts: all
+  tasks:
+    - name: tmcom var permissions
+      become: true
+      shell: 'setfacl -dR -m u:www-data:rwX -m u:ubuntu:rwX var && setfacl -R -m u:www-data:rwX -m u:ubuntu:rwX var'
+      args:
+        chdir: /var/www/sites/tobymackenzie.com
+      #-!! what should be, but doesn't work
+      # acl:
+      #   default: '{{item.default}}'
+      #   entity: '{{item.entity}}'
+      #   etype: user
+      #   path: /var/www/sites/tobymackenzie.com/var
+      #   permissions: rwX
+      #   recursive: true
+      #   state: present
+      # with_items:
+      #   - {default: true, entity: ubuntu}
+      #   - {default: false, entity: ubuntu}
+      #   - {default: true, entity: www-data}
+      #   - {default: false, entity: www-data}
+    - name: tmcom wp-uploads permissions
+      become: true
+      shell: 'setfacl -dR -m u:www-data:rwX -m u:ubuntu:rwX app/files/wp-uploads && setfacl -R -m u:www-data:rwX -m u:ubuntu:rwX app/files/wp-uploads'
+      args:
+        chdir: /var/www/sites/tobymackenzie.com
+    - name: install tmcom deps
+      command: 'composer install{% if tmcomEnv == "prod" %} --no-dev --optimize-autoloader{% endif %}'
+      args:
+        chdir: /var/www/sites/tobymackenzie.com
+    - name: clear tmcom cache
+      command: 'bin/console --env={{tmcomEnv}} --no-warmup cache:clear'
+      args:
+        chdir: /var/www/sites/tobymackenzie.com
+    - name: set up tmcom db
+      become: true
+      mysql_db:
+        name: tmcom
+        state: present
+    - name: tmcom db user
+      become: true
+      mysql_user:
+        name: tmcom
+        password: '{{tmcomDBPassword}}'
+        priv: 'tmcom.*:ALL'
+        state: present

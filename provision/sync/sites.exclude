@@ -1,0 +1,12 @@
+.DS_Store
+.git
+.sass-cache
+caches/
+node_modules/
+/tobymackenzie.com/app/config/parameters.yml
+/tobymackenzie.com/app/config/wp-local.php
+/tobymackenzie.com/app/files/wp-uploads/
+/tobymackenzie.com/var/cache/*
+/tobymackenzie.com/var/logs/*
+/tobymackenzie.com/var/sessions/*
+/tobymackenzie.com/vendor/

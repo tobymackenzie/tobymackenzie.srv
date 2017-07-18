@@ -1,0 +1,12 @@
+#-@ https://stackoverflow.com/a/42635237/1139122
+- name: prepare for ansible
+  become: true
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: install python
+      changed_when:
+        - pythonInstall.stdout != ''
+        - pythonInstall.stdout != '\r\n'
+      raw: bash -c "test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)"
+      register: pythonInstall
