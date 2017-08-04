@@ -40,7 +40,7 @@
         url: https://getcomposer.org/installer
       when: isComposerInstalled.stat.exists != true
     - name: build composer
-      become: ubuntu #--limited privileges
+      become: '{{adminUser}}' #--limited privileges
       command: 'php /tmp/composerInstall --filename=composer --install-dir=/tmp'
       when: isComposerInstalled.stat.exists != true
     - name: install composer
@@ -53,7 +53,7 @@
       when: isComposerInstalled.stat.exists != true
     - name: set composer permissions
       file:
-        group: ubuntu #--allow limited privilege updates
+        group: '{{adminUser}}' #--allow limited privilege updates
         mode: 0775
         owner: root
         path: /usr/local/bin/composer
