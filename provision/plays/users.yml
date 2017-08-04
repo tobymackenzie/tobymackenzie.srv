@@ -5,7 +5,7 @@
   tasks:
     - name: install ssh key
       lineinfile:
-        dest: /home/ubuntu/.ssh/authorized_keys
+        dest: '/home/{{adminUser}}/.ssh/authorized_keys'
         line: '{{tmKey}}'
         state: present
 #-!! should have an unprivileged user for owning and editing web files
