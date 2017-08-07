@@ -20,13 +20,21 @@
   become: true
   hosts: all
   tasks:
-    - name: site permissions
+    - name: site folder ownership
       file:
         group: '{{adminUser}}'
-        mode: 0755
         owner: '{{adminUser}}'
         path: /var/www/sites
         recurse: true
+    #-@ https://stackoverflow.com/a/28782805/1139122
+    - name: site folder file permissions
+      command: 'find /var/www/sites -type f -exec chmod -c go-wx {} \;'
+      register: tmp
+      changed_when: 'tmp.stdout != ""'
+    - name: site folder directory permissions
+      command: 'find /var/www/sites -type d -exec chmod -c go-w {} \;'
+      register: tmp
+      changed_when: 'tmp.stdout != ""'
 - name: prepare tmcom
   become: '{{adminUser}}'
   #-!! env stuff should be handled elsewhere
