@@ -1,0 +1,8 @@
+imports:
+  - {resource: console.php}
+
+tjm_console:
+  name: 'server-tobymackenzie.com'
+  version: '0.1'
+  commands:
+    'TJM\TMCom\Command': '%paths.project%/src/Command'

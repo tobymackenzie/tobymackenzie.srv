@@ -1,82 +1,13 @@
 #!/usr/bin/env php
 <?php
-$server = new Server();
-$server->run(array_slice($argv, 1));
+use Symfony\Component\Console\Input\ArgvInput;
+use TJM\Component\Console\Application;
 
-class Server{
-	protected $servers = Array(
-		'public'=> Array(
-			'host'=> 'tobymackenzie.com'
-			,'user'=> 'ubuntu'
-		)
-	);
-	public function run($args){
-		$opts = Array();
-		$tasks = Array();
-		$count = count($args);
-		for($i = 0; $i < $count; ++$i){
-			$arg = $args[$i];
-			if(substr($arg, 0, 1) === '-'){
-				if(substr($arg, 1, 1) === '-'){
-					//--double dash
-					$opts[] = substr($arg, 2);
-				}else{
-					//--single dash
-					foreach(str_split(substr($arg, 1)) as $opt){
-						$opts[] = $opt;
-					}
-				}
-			}else{
-				$tasks[] = $arg;
-			}
-		}
-		foreach($opts as $opt){
-		}
-		foreach($tasks as $task){
-			$this->{'run' . ucfirst($task)}($opts);
-		}
-	}
-
-	//==tasks
-	public function runBackup(&$opts = Array()){
-		$server = $opts['server'] ?? 'public';
-		switch($server){
-			case 'public':
-				$host = $this->servers[$server]['host'];
-				$user = $this->servers[$server]['user'] ?? 'ubuntu';
-
-				#==back up letsencrypt certs
-				$dest = '/Volumes/letsencrypt/';
-				if(is_dir($dest) && is_writable($dest)){
-					$date = new DateTime();
-					$date = $date->format('Ymd-His');
-					passthru("rsync -e ssh -aPvx --delete --link-dest='../latest' --modify-window=10 --rsync-path='sudo rsync' {$user}@{$host}:/etc/letsencrypt/ {$dest}/tmp-{$date} && mv {$dest}/tmp-{$date} {$dest}/{$date} && ln -nfs {$dest}/{$date} {$dest}/latest");
-				}else{
-					echo "letsencrypt drive must be mounted.";
-				}
-			break;
-		}
-	}
-	public function runProvision(&$opts = Array()){
-		$server = $opts['server'] ?? 'public';
-		switch($server){
-			case 'dev':
-				passthru('vagrant provision');
-			break;
-			case 'public':
-				$user = $this->servers[$server]['user'] ?? 'ubuntu';
-				$book = __DIR__ . "/../provision/{$server}.yml";
-				$inventoryFile = __DIR__ . "/../provision/hosts/{$server}.yml";
-				$command = "ansible-playbook --diff -i {$inventoryFile} -u {$user}";
-				if(in_array('list-tasks', $opts)){
-					$command .= ' --list-tasks';
-				}
-				$command .= " {$book}";
-				passthru($command, $return);
-				if($return){
-					echo "command failed: {$command}";
-				}
-			break;
-		}
-	}
+$loader = __DIR__ . '/../vendor/autoload.php';
+if(!file_exists($loader)){
+	chdir(__DIR__ . '/..');
+	passthru('composer install');
 }
+$loader = require_once($loader);
+$app = new Application(__DIR__ . '/../config/console.yml');
+$app->run(new ArgvInput());

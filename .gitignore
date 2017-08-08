@@ -3,5 +3,7 @@
 *.swp
 .DS_Store
 /.vagrant
+/composer.lock
 /sites/*
 !/sites/default
+/vendor

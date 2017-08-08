@@ -1,0 +1,13 @@
+{
+	"autoload": {
+		"psr-4": {
+			"TJM\\TMCom\\": "src"
+		}
+	}
+	,"require": {
+		"php": ">=7.0.0"
+		,"symfony/yaml": "^3.3"
+		,"tjm/sy-console": "^1.0"
+		,"tjm/sy-dependency-injection": "@dev"
+	}
+}
