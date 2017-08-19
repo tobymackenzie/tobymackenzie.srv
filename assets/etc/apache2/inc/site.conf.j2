@@ -20,5 +20,5 @@ DocumentRoot /var/www/sites/{{item.key}}{{item.value.webroot|default('/')}}
 </Directory>
 #==logs
 {% endif %}
-CustomLog ${APACHE_LOG_DIR}/{{item.key}}-access.log combined
+CustomLog ${APACHE_LOG_DIR}/{{item.key}}-access.log vhost_combined
 ErrorLog ${APACHE_LOG_DIR}/{{item.key}}-error.log
