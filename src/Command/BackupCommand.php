@@ -26,18 +26,26 @@ class BackupCommand extends Base{
 				//-! should come from config
 				$host = 'tobymackenzie.com';
 				$user = 'ubuntu';
-
-				#==back up letsencrypt certs
-				$dest = '/Volumes/LetsEncrypt';
-				if(is_dir($dest) && is_writable($dest)){
-					$date = new DateTime();
-					$date = $date->format('Ymd-His');
-					passthru("rsync -e ssh -aPvx --delete --link-dest='../_latest' --modify-window=10 --rsync-path='sudo rsync' {$user}@{$host}:/etc/letsencrypt/ {$dest}/tmp-{$date} && mv {$dest}/tmp-{$date} {$dest}/{$date} && ln -nfs {$dest}/{$date} {$dest}/_latest", $return);
-					if($return){
-						throw new Exception("backing up letsencrypt failed: running \`{$command}\`");
+				$date = new DateTime();
+				$date = $date->format('Ymd-His');
+				foreach([
+					'letsencrypt'=> [
+						'dest'=> '/Volumes/LetsEncrypt'
+						,'src'=> '/etc/letsencrypt/'
+					]
+					,'tmcom files'=> [
+						'dest'=> '/Volumes/Backup/tmcom/tmfiles'
+						,'src'=> '/var/www/sites/tobymackenzie.com/app/files/'
+					]
+				] as $name=> $config){
+					if(is_dir($config['dest']) && is_writable($config['dest'])){
+						passthru("rsync -e ssh -aPvx --delete --link-dest='../_latest' --modify-window=10 --rsync-path='sudo rsync' {$user}@{$host}:{$config['src']} {$config['dest']}/tmp-{$date} && mv {$config['dest']}/tmp-{$date} {$config['dest']}/{$date} && ln -nfs {$config['dest']}/{$date} {$config['dest']}/_latest", $return);
+						if($return){
+							throw new Exception("backing up {$name} failed: running \`{$command}\`");
+						}
+					}else{
+						error_log("not backing up {$name} data: path not writeable.");
 					}
-				}else{
-					error_log("not backing up letsencrypt data: path not writeable.");
 				}
 			break;
 			default:
