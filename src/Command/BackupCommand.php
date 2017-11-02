@@ -37,9 +37,16 @@ class BackupCommand extends Base{
 						'dest'=> '/Volumes/Backup/tmcom/tmfiles'
 						,'src'=> '/var/www/sites/tobymackenzie.com/app/files/'
 					]
+					//-!! should come from config
+					,'wrk'=> [
+						'customOpts'=> '--exclude="/.*"'
+						,'dest'=> '/Volumes/Abu/tmcom/wrk'
+						,'src'=> '/home/wrk/'
+					]
 				] as $name=> $config){
 					if(is_dir($config['dest']) && is_writable($config['dest'])){
-						passthru("rsync -e ssh -aPvx --delete --link-dest='../_latest' --modify-window=10 --rsync-path='sudo rsync' {$user}@{$host}:{$config['src']} {$config['dest']}/tmp-{$date} && mv {$config['dest']}/tmp-{$date} {$config['dest']}/{$date} && ln -nfs {$config['dest']}/{$date} {$config['dest']}/_latest", $return);
+						$customOpts = $config['customOpts'] ?? '';
+						passthru("rsync -e ssh -aPvx --delete {$customOpts} --link-dest='../_latest' --modify-window=10 --rsync-path='sudo rsync' {$user}@{$host}:{$config['src']} {$config['dest']}/tmp-{$date} && mv {$config['dest']}/tmp-{$date} {$config['dest']}/{$date} && ln -nfs {$config['dest']}/{$date} {$config['dest']}/_latest", $return);
 						if($return){
 							throw new Exception("backing up {$name} failed: running \`{$command}\`");
 						}
