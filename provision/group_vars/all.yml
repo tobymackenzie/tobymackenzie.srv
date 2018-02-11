@@ -5,9 +5,8 @@ fw_allow:
   - { port: 443, proto: tcp }
 sites:
   tobymackenzie.com:
-    aliases:
-      - www.tobymackenzie.com
     https: true
+    name: www.tobymackenzie.com
     webroot: /web/
   dev.tobymackenzie.com:
     https: true
