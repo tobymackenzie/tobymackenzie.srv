@@ -1,4 +1,5 @@
 adminUser: ubuntu
+defaultSite: 'tobymackenzie.com'
 fw_allow:
   - { port: 22, proto: tcp }
   - { port: 80, proto: tcp }

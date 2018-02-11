@@ -46,11 +46,6 @@
         dest: /etc/apache2/mods-available/ssl.conf
         src: ../../assets/etc/apache2/mods-available/ssl.conf
       register: _apacheConfSSLConfResult
-    - name: copy default site conf
-      copy:
-        dest: /etc/apache2/sites-enabled/000-default.conf
-        src: ../../assets/etc/apache2/sites-enabled/000-default.conf
-      register: _apacheConfDefaultSiteResult
     - name: create apache inc directory
       file:
         path: /etc/apache2/inc
@@ -63,7 +58,7 @@
       with_dict: '{{ sites }}'
     - name: create apache vhosts
       template:
-        dest: /etc/apache2/sites-enabled/{{item.key}}.conf
+        dest: /etc/apache2/sites-enabled/{{(item.key == defaultSite | default('')) | ternary('0-','')}}{{item.key}}.conf
         src: ../../assets/etc/apache2/sites-enabled/site.conf.j2
       register: _apacheConfVhostsResult
       with_dict: '{{sites}}'
