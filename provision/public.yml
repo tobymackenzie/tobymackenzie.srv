@@ -1,1 +1,6 @@
 - include: plays/main.yml
+- name: load vars
+  hosts: all
+  tasks:
+    - name: load vars
+      include_vars: group_vars/all.yml
