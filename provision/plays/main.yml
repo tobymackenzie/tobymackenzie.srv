@@ -5,4 +5,5 @@
 - include: sites.yml
 - include: https.yml
 - include: configureLAMP.yml
+- include: dbBackup.yml
 - include: secure.yml

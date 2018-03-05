@@ -1,0 +1,51 @@
+- name: set up db backups
+  become: true
+  hosts: all
+  tasks:
+    - name: add db backup system user
+      user:
+        createhome: yes
+        home: '/home/{{backupUser}}'
+        name: '{{backupUser}}'
+        state: present
+    - name: create db backup mysql user
+      mysql_user:
+        name: '{{dbBackupUser}}'
+        password: '{{dbBackupPassword}}'
+        priv: '*.*:SELECT'
+        state: present
+    - name: create backup user bin folder
+      file:
+        mode: 0700
+        group: '{{backupUser}}'
+        owner: '{{backupUser}}'
+        path: '/home/{{backupUser}}/bin'
+        state: directory
+    - name: install db backup script
+      template:
+        dest: '/home/{{backupUser}}/bin/db-backup'
+        mode: 0700
+        group: '{{backupUser}}'
+        owner: '{{backupUser}}'
+        src:  ../../assets/home/backup/bin/db-backup.j2
+    - name: create backup folder
+      file:
+        mode: 0770
+        group: '{{backupUser}}'
+        owner: root
+        path: '{{backupRootPath}}'
+        state: directory
+    - name: create db backup folder
+      file:
+        mode: 0770
+        group: '{{backupUser}}'
+        owner: '{{backupUser}}'
+        path: '{{dbBackupPath}}'
+        state: directory
+    - name: create db backup cron entry
+      cron:
+        hour: 3
+        job: '/home/{{backupUser}}/bin/db-backup'
+        minute: 6
+        name: db backup
+        user: '{{backupUser}}'

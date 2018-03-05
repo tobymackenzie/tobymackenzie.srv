@@ -1,0 +1,146 @@
+#!/usr/bin/env php
+<?php
+/*=====
+==config
+=====*/
+$dbDsn = 'mysql:host=localhost;charset=utf8';
+$dbPassword = '{{dbBackupPassword}}';
+$dbUser = '{{dbBackupUser}}';
+$skipDbs = ['information_schema', 'mysql', 'performance_schema', 'sys'];
+$destPath = '{{dbBackupPath}}';
+
+/*=====
+==main
+=====*/
+//--make sure to directory exists
+makeDir($destPath);
+
+//--connect to db
+$dbConn = new PDO($dbDsn, $dbUser, $dbPassword);
+
+//--loop through dbs
+$dbResults = $dbConn->query('show databases');
+if($dbResults){
+	$unhandledDbPaths = glob($destPath . '/*');
+	foreach($dbResults as $db){
+		$db = $db[0];
+		if(!in_array($db, $skipDbs)){
+			output("==== loading db {$db}");
+			$dbConn->exec("use `{$db}`");
+			$dbPath = $destPath . '/' . makePathPieceSafe($db);
+			if(($removeKey = array_search($dbPath, $unhandledDbPaths)) !== false){
+				unset($unhandledDbPaths[$removeKey]);
+			}
+			makeDir($dbPath);
+			//--loop through tables
+			$tablesResults = $dbConn->query('show tables');
+			if($tablesResults){
+				$unhandledTablePaths = glob($dbPath . '/*');
+				foreach($tablesResults as $table){
+					$table = $table[0];
+					output("---- loading table {$table}");
+					$tablePath = $dbPath . '/' . makePathPieceSafe($table);
+					if(($removeKey = array_search($tablePath, $unhandledTablePaths)) !== false){
+						unset($unhandledTablePaths[$removeKey]);
+					}
+					makeDir($tablePath);
+					//--get keys
+					$keys = [];
+					$keysResults = $dbConn->query("show keys from `{$table}` where Key_name = 'PRIMARY'");
+					if($keysResults){
+						foreach($keysResults as $keyData){
+							$keys[] = $keyData['Column_name'];
+						}
+					}else{
+						throwMysqlError($dbConn, "Couldn't get keys");
+					}
+					//--loop through table rows
+					$rowsResults = $dbConn->query("select * from `{$table}`");;
+					if($rowsResults){
+						$unhandledRowPaths = glob($tablePath . '/*.json');
+						foreach($rowsResults->fetchAll(PDO::FETCH_ASSOC) as $row){
+							$id = [];
+							foreach($keys as $key){
+								$id[] = $row[$key];
+							}
+							$id = makePathPieceSafe(implode('--column--', $id));
+							$rowPath = $tablePath . "/{$id}.json";
+							if(($removeKey = array_search($rowPath, $unhandledRowPaths)) !== false){
+								unset($unhandledRowPaths[$removeKey]);
+							}
+							$content = json_encode($row);
+							if($content){
+								if(!(file_exists($rowPath) && $content === file_get_contents($rowPath))){
+									output("writing row {$id}");
+									file_put_contents($rowPath, $content);
+								}else{
+									// output("row {$id} unchanged");
+								}
+							}else{
+								output("row empty");
+							}
+						}
+						//--remove rows that no longer exist
+						foreach($unhandledRowPaths as $rowPath){
+							output("removing row {$rowPath}");
+							removePathNode($rowPath);
+						}
+					}else{
+						output("no rows");
+					}
+				}
+				//--remove tables that no longer exist
+				foreach($unhandledTablePaths as $tablePath){
+					output("removing table {$tablePath}");
+					removePathNode($tablePath);
+				}
+			}
+		}else{
+			output("==== skipping db {$db}");
+		}
+	}
+	//--remove dbs that no longer exist
+	foreach($unhandledDbPaths as $dbPath){
+		output("removing db {$dbPath}");
+		removePathNode($dbPath);
+	}
+}else{
+	throwMysqlError($dbConn, "Couldn't get databases");
+}
+
+
+/*=====
+==helpers
+=====*/
+function makeDir($dir){
+	passthru("mkdir -p {$dir}");
+}
+function throwMysqlError($dbConn, $description = null){
+	$message = '';
+	if($description){
+		$message .= "{$description}: ";
+	}
+	$message .= json_encode($dbConn->errorInfo());
+	throw new Exception($message);
+}
+//-@ https://stackoverflow.com/a/3338133/1139122
+function removePathNode($path){
+	if(is_dir($path)){
+		foreach(scandir($path) as $subPath){
+			if($subPath !== '.' && $subPath !== '..'){
+				removePathNode($path . '/' . $subPath);
+			}
+		}
+		rmdir($path);
+	}elseif(file_exists($path)){
+		unlink($path);
+	}
+}
+function output($message){
+	// echo "{$message}\n";
+}
+function makePathPieceSafe($piece){
+	$piece = str_replace('\\', '--backslash--', $piece);
+	$piece = str_replace('/', '--slash--', $piece);
+	return $piece;
+}

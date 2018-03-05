@@ -1,4 +1,8 @@
 adminUser: ubuntu
+backupRootPath: '/var/bu'
+backupUser: 'backup'
+dbBackupPath: '{{backupRootPath}}/db'
+dbBackupUser: 'backup'
 defaultSite: 'tobymackenzie.com'
 fw_allow:
   - { port: 22, proto: tcp }

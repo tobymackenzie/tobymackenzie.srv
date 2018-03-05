@@ -29,7 +29,12 @@ class BackupCommand extends Base{
 				$date = new DateTime();
 				$date = $date->format('Ymd-His');
 				foreach([
-					'letsencrypt'=> [
+					'db'=> [
+						'dest'=> '/Volumes/Backup/tmcom/db'
+						,'pre'=> "ssh {$user}@{$host} \"sudo -u backup /home/backup/bin/db-backup\""
+						,'src'=> '/var/bu/db'
+					]
+					,'letsencrypt'=> [
 						'dest'=> '/Volumes/LetsEncrypt'
 						,'src'=> '/etc/letsencrypt/'
 					]
@@ -46,6 +51,12 @@ class BackupCommand extends Base{
 				] as $name=> $config){
 					if(is_dir($config['dest']) && is_writable($config['dest'])){
 						$customOpts = $config['customOpts'] ?? '';
+						if(isset($config['pre']) && $config['pre']){
+							passthru($config['pre'], $return);
+							if($return){
+								throw new Exception("Failed running command \`{$config['pre']}\`");
+							}
+						}
 						passthru("rsync -e ssh -aPvx --delete {$customOpts} --link-dest='../_latest' --modify-window=10 --rsync-path='sudo rsync' {$user}@{$host}:{$config['src']} {$config['dest']}/tmp-{$date} && mv {$config['dest']}/tmp-{$date} {$config['dest']}/{$date} && ln -nfs {$config['dest']}/{$date} {$config['dest']}/_latest", $return);
 						if($return){
 							throw new Exception("backing up {$name} failed: running \`{$command}\`");
