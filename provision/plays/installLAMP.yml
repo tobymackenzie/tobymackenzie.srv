@@ -8,7 +8,7 @@
         state: present
       with_items:
         - apache2
-        - libapache2-mod-php7.0
+        - libapache2-mod-php
     - name: install mysql
       apt:
         name: '{{item}}'
@@ -16,20 +16,21 @@
       with_items:
         - mysql-client
         - mysql-server
-        - php7.0-mysql
+        - php-mysql
         - python-mysqldb #--for mysql_user module
     - name: install php
       apt:
         name: '{{item}}'
         state: present
       with_items:
-        - php7.0
-        - php7.0-curl
-        - php7.0-intl
-        - php7.0-mbstring
-        - php7.0-mysql
-        - php7.0-xml
-        - php7.0-zip #-- for composer
+        - php
+        - php-cli
+        - php-curl
+        - php-intl
+        - php-mbstring
+        - php-mysql
+        - php-xml
+        - php-zip #-- for composer
     - name: check composer's existence
       stat:
         path: '/usr/local/bin/composer'
@@ -40,7 +41,8 @@
         url: https://getcomposer.org/installer
       when: isComposerInstalled.stat.exists != true
     - name: build composer
-      become: '{{adminUser}}' #--limited privileges
+      become: true
+      become_user: '{{adminUser}}' #--limited privileges
       command: 'php /tmp/composerInstall --filename=composer --install-dir=/tmp'
       when: isComposerInstalled.stat.exists != true
     - name: install composer

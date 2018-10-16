@@ -1,4 +1,3 @@
-- include: ansible.yml
 - include: updatePackages.yml
 - include: users.yml
 - include: installLAMP.yml

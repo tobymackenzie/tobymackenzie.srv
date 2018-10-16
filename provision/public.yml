@@ -1,6 +1,7 @@
-- include: plays/main.yml
-- name: load vars
+- include: plays/ansible.yml
+- name: vars
   hosts: all
   tasks:
     - name: load vars
       include_vars: group_vars/all.yml
+- include: plays/main.yml

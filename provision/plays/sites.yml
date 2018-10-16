@@ -36,7 +36,8 @@
       register: tmp
       changed_when: 'tmp.stdout != ""'
 - name: prepare tmcom
-  become: '{{adminUser}}'
+  become: true
+  become_user: '{{adminUser}}'
   #-!! env stuff should be handled elsewhere
   environment:
     SYMFONY_ENV: '{{tmcomEnv}}'
@@ -44,6 +45,7 @@
   tasks:
     - name: tmcom var permissions
       become: true
+      become_user: root
       shell: 'setfacl -dR -m u:www-data:rwX -m u:{{adminUser}}:rwX var && setfacl -R -m u:www-data:rwX -m u:{{adminUser}}:rwX var'
       args:
         chdir: /var/www/sites/tobymackenzie.com
@@ -63,6 +65,7 @@
       #   - {default: false, entity: www-data}
     - name: tmcom wp-uploads permissions
       become: true
+      become_user: root
       shell: 'setfacl -dR -m u:www-data:rwX -m u:{{adminUser}}:rwX app/files/wp-uploads && setfacl -R -m u:www-data:rwX -m u:{{adminUser}}:rwX app/files/wp-uploads'
       args:
         chdir: /var/www/sites/tobymackenzie.com
@@ -76,11 +79,13 @@
         chdir: /var/www/sites/tobymackenzie.com
     - name: set up tmcom db
       become: true
+      become_user: root
       mysql_db:
         name: tmcom
         state: present
     - name: tmcom db user
       become: true
+      become_user: root
       mysql_user:
         name: tmcom
         password: '{{tmcomDBPassword}}'
