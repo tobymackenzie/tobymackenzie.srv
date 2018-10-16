@@ -28,11 +28,11 @@
         recurse: true
     #-@ https://stackoverflow.com/a/28782805/1139122
     - name: site folder file permissions
-      command: 'find /var/www/sites -type f -exec chmod -c go-wx {} \;'
+      command: 'find /var/www/sites -type f -exec chmod -c go-wx {} \+'
       register: tmp
       changed_when: 'tmp.stdout != ""'
     - name: site folder directory permissions
-      command: 'find /var/www/sites -type d -exec chmod -c go-w {} \;'
+      command: 'find /var/www/sites -type d -exec chmod -c go-w {} \+'
       register: tmp
       changed_when: 'tmp.stdout != ""'
 - name: prepare tmcom
