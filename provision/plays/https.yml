@@ -2,20 +2,6 @@
   become: true
   hosts: public
   tasks:
-    - name: install dependency
-      apt:
-        name: software-properties-common
-        state: present
-    - name: add certbot repository
-      apt_repository:
-        repo: ppa:certbot/certbot
-        state: present
-    #-!! handler on above task?
-    - name: update packages
-      apt:
-        cache_valid_time: 86400
-        upgrade: dist
-        update_cache: yes
     - name: install certbot
       apt:
         name: certbot
