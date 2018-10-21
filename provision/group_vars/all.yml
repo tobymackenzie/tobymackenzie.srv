@@ -12,23 +12,21 @@ sites:
   tobymackenzie.com:
     https: true
     name: www.tobymackenzie.com
+    aliases:
+      - tobymackenzie.com
     webroot: /web/
   dev.tobymackenzie.com:
     https: true
     webroot: /
-  me.tobymackenzie.com:
-    log: 'public-alias'
-    redirect: 'www.tobymackenzie.com'
-  personal.tobymackenzie.com:
-    log: 'public-alias'
-    redirect: 'www.tobymackenzie.com'
-  webd.tobymackenzie.com:
-    log: 'public-alias'
-    redirect: 'www.tobymackenzie.com'
-  tobymackenzie.name:
+  public-alias:
     aliases:
+      - '*.tobymackenzie.com'
+      - me.tobymackenzie.com
+      - personal.tobymackenzie.com
+      - webd.tobymackenzie.com
+      - '*.tobymackenzie.name'
       - www.tobymackenzie.name
-    log: 'public-alias'
+    name: tobymackenzie.name
     redirect: 'www.tobymackenzie.com'
 tmKey: 'ssh-rsa !!12345 admin@tobymackenzie.com'
 tmcomEnv: 'prod'
