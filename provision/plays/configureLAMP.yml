@@ -56,12 +56,44 @@
         src: ../../assets/etc/apache2/inc/site.conf.j2
       register: _apacheConfIncResult
       with_dict: '{{ sites }}'
+    - name: determine inc file paths
+      set_fact:
+        apacheIncUsedFiles: '{{_apacheConfIncResult.results|selectattr("invocation", "defined")|map(attribute="invocation.module_args.dest")|list}}'
+    - name: get list of all site inc conf files
+      find:
+        paths: /etc/apache2/inc/
+        patterns: '*.conf'
+      register: allApacheIncFiles
+    - name: determine unneeded site inc files
+      set_fact:
+        unneededApacheIncFiles: '{{allApacheIncFiles.files|map(attribute="path")|difference(apacheIncUsedFiles)}}'
+    - name: remove unneeded site inc files
+      file:
+        path: '{{item}}'
+        state: absent
+      with_items: '{{unneededApacheIncFiles}}'
     - name: create apache vhosts
       template:
         dest: /etc/apache2/sites-enabled/{{(item.key == defaultSite | default('')) | ternary('0-','')}}{{item.key}}.conf
         src: ../../assets/etc/apache2/sites-enabled/site.conf.j2
       register: _apacheConfVhostsResult
       with_dict: '{{sites}}'
+    - name: determine vhost file paths
+      set_fact:
+        apacheVhostUsedFiles: '{{_apacheConfVhostsResult.results|selectattr("invocation", "defined")|map(attribute="invocation.module_args.dest")|list}}'
+    - name: get list of all vhost conf files
+      find:
+        paths: /etc/apache2/sites-enabled/
+        patterns: '*.conf'
+      register: allApacheVhostFiles
+    - name: determine unneeded site vhost files
+      set_fact:
+        unneededApacheVhostFiles: '{{allApacheVhostFiles.files|map(attribute="path")|difference(apacheVhostUsedFiles)}}'
+    - name: remove unneeded site vhost files
+      file:
+        path: '{{item}}'
+        state: absent
+      with_items: '{{unneededApacheVhostFiles}}'
     - name: restart apache
       command: 'apachectl configtest'
       when: _apacheConfHeadersEnabledResult.changed or _apacheConfRewriteEnabledResult.changed or _apacheConfSSLEnabledResult.changed or _apacheConfSSLConfResult or _apacheConfDefaultSiteResult.changed or _apacheConfIncResult.changed or _apacheConfVhostLogResult or _apacheConfVhostsResult.changed
