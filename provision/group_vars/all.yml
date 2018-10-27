@@ -13,13 +13,16 @@ sites:
     https: true
     name: www.tobymackenzie.com
     aliases:
-      - tobymackenzie.com
+      - t.www.tobymackenzie.com
     webroot: /web/
   dev.tobymackenzie.com:
+    aliases:
+      - t.dev.tobymackenzie.com
     https: true
     webroot: /
   public-alias:
     aliases:
+      - 'tobymackenzie.com'
       - '*.tobymackenzie.com'
       - me.tobymackenzie.com
       - personal.tobymackenzie.com
