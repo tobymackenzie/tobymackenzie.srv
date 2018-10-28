@@ -15,6 +15,7 @@ sites:
     aliases:
       - t.www.tobymackenzie.com
     webroot: /web/
+    sort: 0
   dev.tobymackenzie.com:
     aliases:
       - t.dev.tobymackenzie.com
@@ -31,6 +32,7 @@ sites:
       - www.tobymackenzie.name
     name: tobymackenzie.name
     redirect: 'www.tobymackenzie.com'
+    sort: 2
 tmKey: 'ssh-rsa !!12345 admin@tobymackenzie.com'
 tmcomEnv: 'prod'
 workKey: 'ssh-rsa !!12345 admin@tobymackenzie.com'

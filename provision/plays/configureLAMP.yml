@@ -74,7 +74,7 @@
       with_items: '{{unneededApacheIncFiles}}'
     - name: create apache vhosts
       template:
-        dest: /etc/apache2/sites-enabled/{{(item.key == defaultSite | default('')) | ternary('0-','')}}{{item.key}}.conf
+        dest: /etc/apache2/sites-enabled/{{item.value.sort | default('1')}}-{{item.key}}.conf
         src: ../../assets/etc/apache2/sites-enabled/site.conf.j2
       register: _apacheConfVhostsResult
       with_dict: '{{sites}}'
@@ -96,7 +96,7 @@
       with_items: '{{unneededApacheVhostFiles}}'
     - name: restart apache
       command: 'apachectl configtest'
-      when: _apacheConfHeadersEnabledResult.changed or _apacheConfRewriteEnabledResult.changed or _apacheConfSSLEnabledResult.changed or _apacheConfSSLConfResult or _apacheConfDefaultSiteResult.changed or _apacheConfIncResult.changed or _apacheConfVhostLogResult or _apacheConfVhostsResult.changed
+      when: _apacheConfHeadersEnabledResult.changed or _apacheConfRewriteEnabledResult.changed or _apacheConfSSLEnabledResult.changed or _apacheConfSSLConfResult or _apacheConfIncResult.changed or _apacheConfVhostLogResult or _apacheConfVhostsResult.changed
       notify: restart apache
 - name: configure mysql
   become: true
