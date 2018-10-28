@@ -3,7 +3,6 @@ backupRootPath: '/var/bu'
 backupUser: 'backup'
 dbBackupPath: '{{backupRootPath}}/db'
 dbBackupUser: 'backup'
-defaultSite: 'tobymackenzie.com'
 fw_allow:
   - { port: 22, proto: tcp }
   - { port: 80, proto: tcp }
