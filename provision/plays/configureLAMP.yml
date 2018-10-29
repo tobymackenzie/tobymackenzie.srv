@@ -26,6 +26,27 @@
         regexp: '^LogFormat.*vhost_combined$'
         state: present
       register: _apacheConfVhostLogResult
+    - name: remove h2 incompatible mpm
+      apache2_module:
+        ignore_configcheck: true #--needed for removing mpm module
+        name: mpm_prefork
+        state: absent
+    - name: add h2 compatible mpm
+      apache2_module:
+        ignore_configcheck: true #--needed for adding mpm module
+        name: mpm_event
+        state: present
+    - name: enable h2
+      apache2_module:
+        name: http2
+      register: _apacheConfH2EnabledResult
+    - name: enable h2 protocols
+      lineinfile:
+        dest: /etc/apache2/apache2.conf
+        line: 'Protocols h2 h2c http/1.1'
+        regexp: '^Protocols'
+        state: present
+      register: _apacheConfH2ProtocolsResult
     - name: enable mod_headers
       apache2_module:
         name: headers
@@ -36,11 +57,16 @@
         name: rewrite
         state: present
       register: _apacheConfRewriteEnabledResult
+    - name: enable php module for apache
+      apache2_module:
+        name: proxy_fcgi
     - name: enable mod_ssl
       apache2_module:
         name: ssl
         state: present
       register: _apacheConfSSLEnabledResult
+    - name: enable php conf for apache
+      command: a2enconf php7.2-fpm #-! version embedded
     - name: mod_ssl conf
       copy:
         dest: /etc/apache2/mods-available/ssl.conf
@@ -96,7 +122,7 @@
       with_items: '{{unneededApacheVhostFiles}}'
     - name: restart apache
       command: 'apachectl configtest'
-      when: _apacheConfHeadersEnabledResult.changed or _apacheConfRewriteEnabledResult.changed or _apacheConfSSLEnabledResult.changed or _apacheConfSSLConfResult or _apacheConfIncResult.changed or _apacheConfVhostLogResult or _apacheConfVhostsResult.changed
+      when: _apacheConfH2EnabledResult.changed or _apacheConfH2ProtocolsResult or _apacheConfHeadersEnabledResult.changed or _apacheConfRewriteEnabledResult.changed or _apacheConfSSLEnabledResult.changed or _apacheConfSSLConfResult or _apacheConfIncResult.changed or _apacheConfVhostLogResult or _apacheConfVhostsResult.changed
       notify: restart apache
 - name: configure mysql
   become: true

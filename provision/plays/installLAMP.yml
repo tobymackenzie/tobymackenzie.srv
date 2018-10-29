@@ -4,11 +4,8 @@
   tasks:
     - name: install apache
       apt:
-        name: '{{item}}'
+        name: apache2
         state: present
-      with_items:
-        - apache2
-        - libapache2-mod-php
     - name: install mysql
       apt:
         name: '{{item}}'
@@ -26,6 +23,7 @@
         - php
         - php-cli
         - php-curl
+        - php-fpm
         - php-intl
         - php-mbstring
         - php-mysql
