@@ -19,6 +19,13 @@
         letsEncryptSiteStatus: '{{letsEncryptSiteStatus|default({})|combine({item.item.key: item.stat.exists})}}'
       when: item.stat is defined
       with_items: '{{enabledLetsEncryptStats.results}}'
+    - name: configure server name
+      lineinfile:
+        dest: /etc/apache2/apache2.conf
+        line: 'ServerName {{serverName}}'
+        regexp: '^ServerName.*$'
+        state: present
+      register: _apacheConfServerNameResult
     - name: configure vhost log format
       lineinfile:
         dest: /etc/apache2/apache2.conf
@@ -122,7 +129,7 @@
       with_items: '{{unneededApacheVhostFiles}}'
     - name: restart apache
       command: 'apachectl configtest'
-      when: _apacheConfH2EnabledResult.changed or _apacheConfH2ProtocolsResult or _apacheConfHeadersEnabledResult.changed or _apacheConfRewriteEnabledResult.changed or _apacheConfSSLEnabledResult.changed or _apacheConfSSLConfResult or _apacheConfIncResult.changed or _apacheConfVhostLogResult or _apacheConfVhostsResult.changed
+      when: _apacheConfH2EnabledResult.changed or _apacheConfH2ProtocolsResult or _apacheConfHeadersEnabledResult.changed or _apacheConfRewriteEnabledResult.changed or _apacheConfSSLEnabledResult.changed or _apacheConfSSLConfResult or _apacheConfIncResult.changed or _apacheConfServerNameResult or _apacheConfVhostLogResult or _apacheConfVhostsResult.changed
       notify: restart apache
 - name: configure mysql
   become: true
