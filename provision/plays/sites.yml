@@ -70,11 +70,7 @@
       args:
         chdir: /var/www/sites/tobymackenzie.com
     - name: install tmcom deps
-      shell: '{% if tmcomEnv == "prod" %} COMPOSER_DISCARD_CHANGES=1 {% endif %}composer install{% if tmcomEnv == "prod" %} --no-dev --optimize-autoloader{% endif %}'
-      args:
-        chdir: /var/www/sites/tobymackenzie.com
-    - name: clear tmcom cache
-      command: 'bin/console --env={{tmcomEnv}} --no-warmup cache:clear'
+      shell: '{% if tmcomEnv == "prod" %} export SYMFONY_ENV=prod && export COMPOSER_DISCARD_CHANGES=1 && {% endif %}composer install{% if tmcomEnv == "prod" %} --no-dev --optimize-autoloader{% endif %}'
       args:
         chdir: /var/www/sites/tobymackenzie.com
     - name: set up tmcom db
