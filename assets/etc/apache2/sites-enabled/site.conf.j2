@@ -1,4 +1,5 @@
-<VirtualHost *:80>
+{#-# 2784 is to support original www port (see <https://worldwideweb.cern.ch/code/>) for main site #}
+<VirtualHost *:80{% if item.value.sort is defined and item.value.sort == 0 %} *:2784{% endif %}>
 	Include inc/{{item.key}}.conf
 </VirtualHost>
 {% if letsEncryptSiteStatus[item.key] is defined and letsEncryptSiteStatus[item.key] %}

@@ -7,6 +7,7 @@ fw_allow:
   - { port: 22, proto: tcp }
   - { port: 80, proto: tcp }
   - { port: 443, proto: tcp }
+  - { port: 2784, proto: tcp } # original http port
 serverName: 'tobymackenzie.com'
 sites:
   tobymackenzie.com:

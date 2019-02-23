@@ -33,6 +33,12 @@
         regexp: '^LogFormat.*vhost_combined$'
         state: present
       register: _apacheConfVhostLogResult
+    - name: enable original http port
+      lineinfile:
+        dest: '/etc/apache2/ports.conf'
+        line: 'Listen 2784'
+        state: present
+      register: _apacheConfOldPortResult
     - name: remove h2 incompatible mpm
       apache2_module:
         ignore_configcheck: true #--needed for removing mpm module
@@ -129,7 +135,7 @@
       with_items: '{{unneededApacheVhostFiles}}'
     - name: restart apache
       command: 'apachectl configtest'
-      when: _apacheConfH2EnabledResult.changed or _apacheConfH2ProtocolsResult or _apacheConfHeadersEnabledResult.changed or _apacheConfRewriteEnabledResult.changed or _apacheConfSSLEnabledResult.changed or _apacheConfSSLConfResult or _apacheConfIncResult.changed or _apacheConfServerNameResult or _apacheConfVhostLogResult or _apacheConfVhostsResult.changed
+      when: _apacheConfH2EnabledResult.changed or _apacheConfH2ProtocolsResult or _apacheConfHeadersEnabledResult.changed or _apacheConfOldPortResult or _apacheConfRewriteEnabledResult.changed or _apacheConfSSLEnabledResult.changed or _apacheConfSSLConfResult or _apacheConfIncResult.changed or _apacheConfServerNameResult or _apacheConfVhostLogResult or _apacheConfVhostsResult.changed
       notify: restart apache
 - name: configure mysql
   become: true
