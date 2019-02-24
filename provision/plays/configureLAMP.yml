@@ -29,7 +29,7 @@
     - name: configure vhost log format
       lineinfile:
         dest: /etc/apache2/apache2.conf
-        line: 'LogFormat "%V:%p %h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" vhost_combined'
+        line: 'LogFormat "%V:%{local}p %h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" vhost_combined'
         regexp: '^LogFormat.*vhost_combined$'
         state: present
       register: _apacheConfVhostLogResult
