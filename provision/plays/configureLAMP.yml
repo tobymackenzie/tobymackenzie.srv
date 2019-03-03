@@ -79,6 +79,9 @@
       notify: 'apache conf change'
     - name: enable php conf for apache
       command: a2enconf php7.2-fpm #-! version embedded
+      args:
+        creates: /etc/apache2/conf-enabled/php7.2-fpm.conf
+      notify: 'apache conf change'
     - name: mod_ssl conf
       copy:
         dest: /etc/apache2/mods-available/ssl.conf
