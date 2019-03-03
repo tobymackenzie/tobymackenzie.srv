@@ -2,9 +2,8 @@
   become: true
   handlers:
     - name: restart apache
-      service:
-        name: apache2
-        state: restarted
+      command: 'apachectl graceful'
+      listen: 'apache conf change'
   hosts: all
   tasks:
     - name: check which sites have certs installed
@@ -25,20 +24,20 @@
         line: 'ServerName {{serverName}}'
         regexp: '^ServerName.*$'
         state: present
-      register: _apacheConfServerNameResult
+      notify: 'apache conf change'
     - name: configure vhost log format
       lineinfile:
         dest: /etc/apache2/apache2.conf
         line: 'LogFormat "%V:%{local}p %h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" vhost_combined'
         regexp: '^LogFormat.*vhost_combined$'
         state: present
-      register: _apacheConfVhostLogResult
+      notify: 'apache conf change'
     - name: enable original http port
       lineinfile:
         dest: '/etc/apache2/ports.conf'
         line: 'Listen 2784'
         state: present
-      register: _apacheConfOldPortResult
+      notify: 'apache conf change'
     - name: remove h2 incompatible mpm
       apache2_module:
         ignore_configcheck: true #--needed for removing mpm module
@@ -52,24 +51,24 @@
     - name: enable h2
       apache2_module:
         name: http2
-      register: _apacheConfH2EnabledResult
+      notify: 'apache conf change'
     - name: enable h2 protocols
       lineinfile:
         dest: /etc/apache2/apache2.conf
         line: 'Protocols h2 h2c http/1.1'
         regexp: '^Protocols'
         state: present
-      register: _apacheConfH2ProtocolsResult
+      notify: 'apache conf change'
     - name: enable mod_headers
       apache2_module:
         name: headers
         state: present
-      register: _apacheConfHeadersEnabledResult
+      notify: 'apache conf change'
     - name: enable mod_rewrite
       apache2_module:
         name: rewrite
         state: present
-      register: _apacheConfRewriteEnabledResult
+      notify: 'apache conf change'
     - name: enable php module for apache
       apache2_module:
         name: proxy_fcgi
@@ -77,14 +76,14 @@
       apache2_module:
         name: ssl
         state: present
-      register: _apacheConfSSLEnabledResult
+      notify: 'apache conf change'
     - name: enable php conf for apache
       command: a2enconf php7.2-fpm #-! version embedded
     - name: mod_ssl conf
       copy:
         dest: /etc/apache2/mods-available/ssl.conf
         src: ../../assets/etc/apache2/mods-available/ssl.conf
-      register: _apacheConfSSLConfResult
+      notify: 'apache conf change'
     - name: create apache inc directory
       file:
         path: /etc/apache2/inc
@@ -93,6 +92,7 @@
       template:
         dest: /etc/apache2/inc/{{item.key}}.conf
         src: ../../assets/etc/apache2/inc/site.conf.j2
+      notify: 'apache conf change'
       register: _apacheConfIncResult
       with_dict: '{{ sites }}'
     - name: determine inc file paths
@@ -115,6 +115,7 @@
       template:
         dest: /etc/apache2/sites-enabled/{{item.value.sort | default('1')}}-{{item.key}}.conf
         src: ../../assets/etc/apache2/sites-enabled/site.conf.j2
+      notify: 'apache conf change'
       register: _apacheConfVhostsResult
       with_dict: '{{sites}}'
     - name: determine vhost file paths
@@ -133,10 +134,6 @@
         path: '{{item}}'
         state: absent
       with_items: '{{unneededApacheVhostFiles}}'
-    - name: restart apache
-      command: 'apachectl configtest'
-      when: _apacheConfH2EnabledResult.changed or _apacheConfH2ProtocolsResult or _apacheConfHeadersEnabledResult.changed or _apacheConfOldPortResult or _apacheConfRewriteEnabledResult.changed or _apacheConfSSLEnabledResult.changed or _apacheConfSSLConfResult or _apacheConfIncResult.changed or _apacheConfServerNameResult or _apacheConfVhostLogResult or _apacheConfVhostsResult.changed
-      notify: restart apache
 - name: configure mysql
   become: true
   hosts: all
