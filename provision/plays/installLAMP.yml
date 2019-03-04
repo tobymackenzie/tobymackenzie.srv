@@ -8,27 +8,25 @@
         state: present
     - name: install mysql
       apt:
-        name: '{{item}}'
+        name:
+          - mysql-client
+          - mysql-server
+          - php-mysql
+          - python-mysqldb #--for mysql_user module
         state: present
-      with_items:
-        - mysql-client
-        - mysql-server
-        - php-mysql
-        - python-mysqldb #--for mysql_user module
     - name: install php
       apt:
-        name: '{{item}}'
+        name:
+          - php
+          - php-cli
+          - php-curl
+          - php-fpm
+          - php-intl
+          - php-mbstring
+          - php-mysql
+          - php-xml
+          - php-zip #-- for composer
         state: present
-      with_items:
-        - php
-        - php-cli
-        - php-curl
-        - php-fpm
-        - php-intl
-        - php-mbstring
-        - php-mysql
-        - php-xml
-        - php-zip #-- for composer
     - name: check composer's existence
       stat:
         path: '/usr/local/bin/composer'
