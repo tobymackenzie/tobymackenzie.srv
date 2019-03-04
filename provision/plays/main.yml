@@ -1,8 +1,8 @@
-- include: updatePackages.yml
-- include: users.yml
-- include: installLAMP.yml
-- include: sites.yml
-- include: https.yml
-- include: configureLAMP.yml
-- include: dbBackup.yml
-- include: secure.yml
+- import_playbook: updatePackages.yml
+- import_playbook: users.yml
+- import_playbook: installLAMP.yml
+- import_playbook: sites.yml
+- import_playbook: https.yml
+- import_playbook: configureLAMP.yml
+- import_playbook: dbBackup.yml
+- import_playbook: secure.yml

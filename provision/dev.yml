@@ -1,4 +1,4 @@
-- include: plays/ansible.yml
+- import_playbook: plays/ansible.yml
 - name: vars
   hosts: all
   tasks:
@@ -10,4 +10,4 @@
         tmcomDBPassword: '!!12345'
         dbBackupPassword: '!!12345'
         tmcomEnv: dev
-- include: plays/main.yml
+- import_playbook: plays/main.yml
