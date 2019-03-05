@@ -82,6 +82,21 @@
       args:
         creates: /etc/apache2/conf-enabled/php7.2-fpm.conf
       notify: 'apache conf change'
+    - name: handle phps files as php
+      #-# simplest way to allow `.phps` urls to be accessed without risk of exposing code
+      lineinfile:
+        dest: /etc/apache2/conf-enabled/php7.2-fpm.conf
+        line: '    <FilesMatch ".+\.ph(ar|p|ps|tml)$">'
+        regexp: '<FilesMatch "\.\+\\\.ph\(ar'
+        state: present
+      notify: 'apache conf change'
+    - name: allow access to nameless php and phps files
+      #-# mainly doing this because some bot is hitting `/.php` and throwing an error in the log. don't really know of a danger of allowing access to that file
+      replace:
+        dest: /etc/apache2/conf-enabled/php7.2-fpm.conf
+        replace: '# Require all denied'
+        regexp: '#?\s?Require all denied'
+      notify: 'apache conf change'
     - name: mod_ssl conf
       copy:
         dest: /etc/apache2/mods-available/ssl.conf
