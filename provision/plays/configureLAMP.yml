@@ -77,6 +77,18 @@
         name: ssl
         state: present
       notify: 'apache conf change'
+    - name: disable cgi-bin path
+      #-# we're not using cgi-bin dir and it takes a usable url path
+      command: a2disconf serve-cgi-bin
+      args:
+        removes: /etc/apache2/conf-enabled/serve-cgi-bin.conf
+      notify: 'apache conf change'
+    - name: disable mod_status
+      #-# status page not accessible once vhosts are added and takes usable url path
+      apache2_module:
+        name: status
+        state: absent
+      notify: 'apache conf change'
     - name: enable php conf for apache
       command: a2enconf php7.2-fpm #-! version embedded
       args:
