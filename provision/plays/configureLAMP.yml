@@ -59,6 +59,11 @@
         regexp: '^Protocols'
         state: present
       notify: 'apache conf change'
+    - name: enable mod_expires
+      apache2_module:
+        name: expires
+        state: present
+      notify: 'apache conf change'
     - name: enable mod_headers
       apache2_module:
         name: headers
