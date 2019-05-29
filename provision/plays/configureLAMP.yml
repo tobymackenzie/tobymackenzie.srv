@@ -169,6 +169,17 @@
         path: '{{item}}'
         state: absent
       with_items: '{{unneededApacheVhostFiles}}'
+- name: configure mime types
+  become: true
+  hosts: all
+  tasks:
+    - name: add woff2
+      lineinfile:
+        dest: /etc/mime.types
+        line: 'font/woff2                          woff2'
+        regexp: '^.*woff2$'
+        state: present
+      notify: 'apache conf change'
 - name: configure mysql
   become: true
   hosts: all
