@@ -5,7 +5,7 @@
 caches/
 node_modules/
 /tobymackenzie.com/app/config/parameters.yml
-/tobymackenzie.com/app/config/wp-local.php
+/tobymackenzie.com/config/blog.local.php
 /tobymackenzie.com/app/files/wp-uploads/*
 /tobymackenzie.com/var/cache/*
 /tobymackenzie.com/var/logs/*
