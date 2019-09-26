@@ -7,7 +7,7 @@ ServerAlias {{alias}}
 {% if item.value.redirect is defined %}
 <IfModule mod_rewrite.c>
 	RewriteEngine on
-	RewriteRule ^ %{REQUEST_SCHEME}://{{item.value.redirect}}%{REQUEST_URI} [NC,L,QSA,R=302]
+	RewriteRule ^ %{REQUEST_SCHEME}://{{item.value.redirect}}%{REQUEST_URI} [NC,L,QSA,R=301]
 </IfModule>
 {% else %}
 #==docroot
