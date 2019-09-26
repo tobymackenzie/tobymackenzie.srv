@@ -4,8 +4,8 @@
 .well-known/
 caches/
 node_modules/
-/tobymackenzie.com/app/config/parameters.yml
-/tobymackenzie.com/config/blog.local.php
+/tobymackenzie.com/config/*.local.php
+/tobymackenzie.com/config/*.local.yml
 /tobymackenzie.com/app/files/wp-uploads/*
 /tobymackenzie.com/var/cache/*
 /tobymackenzie.com/var/logs/*
