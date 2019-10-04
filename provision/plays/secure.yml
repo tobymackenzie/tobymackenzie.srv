@@ -1,4 +1,5 @@
 #-@ https://ryaneschinger.com/blog/securing-a-server-with-ansible/
+#-# unattended upgrades are set up to do automated security updates in 'packageManager' play
 - name: secure server
   become: true
   handlers:
@@ -29,10 +30,6 @@
           - 'ufw'
           - 'unattended-upgrades'
         state: present
-    - name: configure apt update intervals
-      copy:
-        dest: '/etc/apt/apt.conf.d/10periodic'
-        src: '../../assets/etc/apt/apt.conf.d/10periodic'
     - name: block all ports by default
       ufw:
         policy: deny

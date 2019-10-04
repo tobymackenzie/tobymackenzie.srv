@@ -1,0 +1,12 @@
+- name: package manager
+  become: true
+  hosts: all
+  tasks:
+    - name: configure apt update intervals
+      copy:
+        dest: '/etc/apt/apt.conf.d/10periodic'
+        src: '../../assets/etc/apt/apt.conf.d/10periodic'
+    - name: configure apt unattended upgrades
+      copy:
+        dest: '/etc/apt/apt.conf.d/50unattended-upgrades'
+        src: '../../assets/etc/apt/apt.conf.d/50unattended-upgrades'
