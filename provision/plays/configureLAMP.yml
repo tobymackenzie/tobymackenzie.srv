@@ -6,18 +6,18 @@
       listen: 'apache conf change'
   hosts: all
   tasks:
-    - name: check which sites have certs installed
-      stat:
-        path: '/etc/letsencrypt/live/{{item.key}}'
-      register: enabledLetsEncryptStats
-      when: item.value.https is defined and item.value.https
-      with_dict: '{{sites}}'
+    - name: get list of installed certs
+      find:
+        file_type: any
+        paths: '/etc/letsencrypt/live'
+        patterns: '*'
+        recurse: no
+      register: enabledLetsEncryptFiles
     ##--make letsencrypt cert installed check easier to use in templates
     - name: format letsencrypt cert data for consumption
       set_fact:
-        letsEncryptSiteStatus: '{{letsEncryptSiteStatus|default({})|combine({item.item.key: item.stat.exists})}}'
-      when: item.stat is defined
-      with_items: '{{enabledLetsEncryptStats.results}}'
+        httpsCerts: "{{httpsCerts|default([])}} + ['{{item.path|basename}}']"
+      with_items: '{{enabledLetsEncryptFiles.files}}'
     - name: configure server name
       lineinfile:
         dest: /etc/apache2/apache2.conf

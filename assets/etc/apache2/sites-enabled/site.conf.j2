@@ -2,13 +2,16 @@
 <VirtualHost *:80{% if item.value.sort is defined and item.value.sort == 0 %} *:2784{% endif %}>
 	Include inc/{{item.key}}.conf
 </VirtualHost>
-{% if letsEncryptSiteStatus[item.key] is defined and letsEncryptSiteStatus[item.key] %}
+{% if item.value.https %}
+{%	set httpsCert = item.value.httpsCert|default(item.key) %}
+{%	if httpsCert in httpsCerts %}
 <IfModule mod_ssl.c>
 	<VirtualHost *:443>
 		Include inc/{{item.key}}.conf
 		SSLEngine on
-		SSLCertificateFile /etc/letsencrypt/live/{{item.key}}/fullchain.pem
-		SSLCertificateKeyFile /etc/letsencrypt/live/{{item.key}}/privkey.pem
+		SSLCertificateFile /etc/letsencrypt/live/{{httpsCert}}/fullchain.pem
+		SSLCertificateKeyFile /etc/letsencrypt/live/{{httpsCert}}/privkey.pem
 	</VirtualHost>
 </IfModule>
+{% 	endif %}
 {% endif %}

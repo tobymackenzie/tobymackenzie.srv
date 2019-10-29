@@ -12,6 +12,7 @@ serverName: 'tobymackenzie.com'
 sites:
   tobymackenzie.com:
     https: true
+    httpsCert: tobymackenzie.com
     name: www.tobymackenzie.com
     aliases:
       - t.www.tobymackenzie.com
@@ -21,6 +22,7 @@ sites:
     aliases:
       - t.dev.tobymackenzie.com
     https: true
+    httpsCert: dev.tobymackenzie.com
     webroot: /
   public-alias:
     aliases:
@@ -31,6 +33,8 @@ sites:
       - webd.tobymackenzie.com
       - '*.tobymackenzie.name'
       - www.tobymackenzie.name
+    https: true
+    httpsCert: tobymackenzie.com
     name: tobymackenzie.name
     redirect: 'www.tobymackenzie.com'
     sort: 2
