@@ -32,6 +32,11 @@
         regexp: '^LogFormat.*vhost_combined$'
         state: present
       notify: 'apache conf change'
+    - name: install logs conf
+      copy:
+        dest: /etc/apache2/conf-enabled/logs.conf
+        src: ../../assets/etc/apache2/conf-enabled/logs.conf
+      notify: 'apache conf change'
     - name: enable original http port
       lineinfile:
         dest: '/etc/apache2/ports.conf'
