@@ -112,12 +112,21 @@
         regexp: '<FilesMatch "\.\+\\\.ph\(ar'
         state: present
       notify: 'apache conf change'
+    #--allow as many paths as possible
     - name: allow access to nameless php and phps files
       #-# mainly doing this because some bot is hitting `/.php` and throwing an error in the log. don't really know of a danger of allowing access to that file
       replace:
         dest: /etc/apache2/conf-enabled/php7.2-fpm.conf
         replace: '# Require all denied'
         regexp: '#?\s?Require all denied'
+      notify: 'apache conf change'
+    #--allow as many paths as possible
+    - name: allow access to safe .ht prefixed files
+      lineinfile:
+        dest: /etc/apache2/apache2.conf
+        line: '<FilesMatch "^\.ht(access|passwd)$">'
+        regexp: '^\s*<FilesMatch\s+"\^\\\.ht'
+        state: present
       notify: 'apache conf change'
     - name: mod_ssl conf
       copy:
