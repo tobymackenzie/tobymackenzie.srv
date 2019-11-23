@@ -1,8 +1,21 @@
 - name: install certbot
   become: true
+  handlers:
+    - include: ../handlers.yml
   hosts: public
   tasks:
-    - name: install certbot
+    - name: install certbot cli
       apt:
         name: certbot
         state: present
+    - name: create shared webroot for certbot well-known
+      file:
+        group: www-data
+        mode: '2750'
+        path: /var/www/letsencrypt
+        state: directory
+    - name: install letsencrypt apache conf
+      copy:
+        dest: /etc/apache2/conf-enabled/letsencrypt.conf
+        src: ../../assets/etc/apache2/conf-enabled/letsencrypt.conf
+      notify: 'apache conf change'
