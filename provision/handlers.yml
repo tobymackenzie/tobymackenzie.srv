@@ -1,0 +1,7 @@
+- name: restart apache
+  command: 'apachectl graceful'
+  listen: 'apache conf change'
+- name: restart ssh
+  service:
+    name: ssh
+    state: restarted

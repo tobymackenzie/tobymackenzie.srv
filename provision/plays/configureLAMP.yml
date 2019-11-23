@@ -1,9 +1,7 @@
 - name: configure apache
   become: true
   handlers:
-    - name: restart apache
-      command: 'apachectl graceful'
-      listen: 'apache conf change'
+    - include: ../handlers.yml
   hosts: all
   tasks:
     - name: get list of installed certs

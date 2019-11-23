@@ -3,10 +3,7 @@
 - name: secure server
   become: true
   handlers:
-    - name: restart ssh
-      service:
-        name: ssh
-        state: restarted
+    - include: ../handlers.yml
   hosts: all
   tasks:
     - name: disallow root ssh
