@@ -44,7 +44,7 @@
         state: directory
     - name: create db backup cron entry
       cron:
-        hour: 3
+        hour: 8
         job: '/home/{{backupUser}}/bin/db-backup'
         minute: 6
         name: db backup
