@@ -4,6 +4,7 @@
 *.swp
 .DS_Store
 /.vagrant
+/*.log
 /composer.lock
 /sites/*
 !/sites/default
