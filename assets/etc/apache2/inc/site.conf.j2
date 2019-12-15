@@ -21,4 +21,4 @@ DocumentRoot /var/www/sites/{{item.key}}{{item.value.webroot|default('/')}}
 #==logs
 {% endif %}
 CustomLog ${APACHE_LOG_DIR}/{{item.value.log|default(item.key)}}-access.log vhost_combined
-ErrorLog ${APACHE_LOG_DIR}/{{item.value.log|default(item.key)}}-error.log
+ErrorLog ${APACHE_LOG_DIR}/{{errorLog.value.log|default('sites')}}-error.log
