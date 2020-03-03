@@ -17,7 +17,7 @@ sites:
     name: www.tobymackenzie.com
     aliases:
       - t.www.tobymackenzie.com
-    webroot: /web/
+    webroot: /dist/public/
     sort: 0
   dev.tobymackenzie.com:
     aliases:
