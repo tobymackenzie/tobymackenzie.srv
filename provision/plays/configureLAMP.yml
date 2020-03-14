@@ -41,6 +41,11 @@
         line: 'Listen 2784'
         state: present
       notify: 'apache conf change'
+    - name: disable php module #--needed for mpm module switch
+      apache2_module:
+        name: php7.2
+        state: absent
+      notify: 'apache conf change'
     - name: remove h2 incompatible mpm
       apache2_module:
         ignore_configcheck: true #--needed for removing mpm module
