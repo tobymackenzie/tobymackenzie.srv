@@ -1,3 +1,13 @@
+- name: set up default user
+  become: true
+  hosts: all
+  tasks:
+    - name: set default user shell
+      lineinfile:
+        dest: '/etc/default/useradd'
+        line: 'SHELL=/bin/bash'
+        regexp: '^SHELL='
+        state: present
 #--server administrator
 - name: set up admin user
   become: true
@@ -12,7 +22,7 @@
 #--user for accessing from work
 - name: set up work user
   become: true
-  hosts: prod
+  hosts: [prod, public]
   tasks:
     - name: add work user
       user:
