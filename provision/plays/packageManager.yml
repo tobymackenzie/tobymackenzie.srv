@@ -2,6 +2,10 @@
   become: true
   hosts: all
   tasks:
+    - name: install unattended upgrade package
+      apt:
+        name: 'unattended-upgrades'
+        state: present
     - name: configure apt update intervals
       copy:
         dest: '/etc/apt/apt.conf.d/10periodic'
