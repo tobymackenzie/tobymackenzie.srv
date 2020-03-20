@@ -25,6 +25,11 @@ sites:
     https: true
     httpsCert: dev.tobymackenzie.com
     webroot: /dev.tobymackenzie.com
+  short:
+    accessLog: short
+    https: true
+    httpsCert: tobymackenzie.com
+    webroot: /tobymackenzie.com/dist/short/
   public-alias:
     accessLog: tmpublic
     aliases:
