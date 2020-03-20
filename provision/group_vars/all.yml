@@ -17,14 +17,14 @@ sites:
     name: www.tobymackenzie.com
     aliases:
       - t.www.tobymackenzie.com
-    webroot: /dist/public/
+    webroot: /tobymackenzie.com/dist/public/
     sort: 0
   dev.tobymackenzie.com:
     aliases:
       - t.dev.tobymackenzie.com
     https: true
     httpsCert: dev.tobymackenzie.com
-    webroot: /
+    webroot: /dev.tobymackenzie.com
   public-alias:
     accessLog: tmpublic
     aliases:

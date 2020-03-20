@@ -11,8 +11,8 @@ ServerAlias {{alias}}
 </IfModule>
 {% else %}
 #==docroot
-DocumentRoot /var/www/sites/{{item.key}}{{item.value.webroot|default('/')}}
-<Directory "/var/www/sites/{{item.key}}{{item.value.webroot|default('/')}}">
+DocumentRoot /var/www/sites{{item.value.webroot|default('/')}}
+<Directory "/var/www/sites{{item.value.webroot|default('/')}}">
 	AllowOverride All AuthConfig
 	Options FollowSymLinks Indexes MultiViews
 	Order allow,deny
