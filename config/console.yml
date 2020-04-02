@@ -1,8 +1,11 @@
 imports:
   - {resource: console.php}
+services:
+  TJM\TMCom\Command\:
+    autowire: true
+    resource: '%paths.project%/src/Command'
+    tags: ['console.command']
 
 tjm_console:
   name: 'server-tobymackenzie.com'
   version: '0.1'
-  commands:
-    'TJM\TMCom\Command': '%paths.project%/src/Command'

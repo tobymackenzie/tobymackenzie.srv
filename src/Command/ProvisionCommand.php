@@ -8,9 +8,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TJM\Component\Console\Command\ContainerAwareCommand as Base;
 
 class ProvisionCommand extends Base{
+	static public $defaultName = 'provision';
 	protected function configure(){
 		$this
-			->setName('provision')
 			->setDescription('Provision server group.')
 			->addArgument('group', InputArgument::REQUIRED, 'Name of server group to provision.  Matches YAML file in "provision" directory.')
 			->addOption('book', 'b', InputOption::VALUE_REQUIRED, 'Run playbook by name, from `provision/plays` folder')

@@ -9,9 +9,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TJM\Component\Console\Command\ContainerAwareCommand as Base;
 
 class BackupCommand extends Base{
+	static public $defaultName = 'backup';
 	protected function configure(){
 		$this
-			->setName('backup')
 			->setDescription('Back up server group.')
 			->addArgument('group', InputArgument::OPTIONAL, 'Name of server group to back up.  Matches YAML file in "provision" directory.', 'public')
 		;
