@@ -18,6 +18,17 @@
         dest: '/home/{{adminUser}}/.ssh/authorized_keys'
         line: '{{tmKey}}'
         state: present
+#--vagrant
+- name: set up vagrant user
+  become: true
+  hosts: default #-! means vagrant. we should fix this by renaming vagrant box to dev
+  tasks:
+    #-! we do this because we want to be able to rsync normally, but many of the files are owned by vagrant. we should change them to be owned by adminUser, connect with that user, and then we won't need this
+    - name: install ssh key
+      lineinfile:
+        dest: '/home/vagrant/.ssh/authorized_keys'
+        line: '{{tmKey}}'
+        state: present
 #-!! should have an unprivileged user for owning and editing web files
 #--user for accessing from work
 - name: set up work user
