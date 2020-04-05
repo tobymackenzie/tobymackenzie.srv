@@ -20,6 +20,7 @@ sites:
     webroot: /tobymackenzie.com/dist/public/
     sort: 0
   dev.tobymackenzie.com:
+    accessLog: tmdev
     aliases:
       - t.dev.tobymackenzie.com
     https: true
