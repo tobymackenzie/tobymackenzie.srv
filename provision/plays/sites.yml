@@ -1,21 +1,3 @@
-- name: copy sites
-  become: true
-  hosts: prod
-  tasks:
-    - name: copy sites
-      synchronize:
-        delete: yes
-        dest: /var/www/sites/
-        group: no
-        links: yes
-        owner: no
-        perms: yes
-        recursive: yes
-        rsync_opts:
-          - '--copy-unsafe-links'
-          - '--exclude-from={{inventory_dir}}/../sync/sites.exclude'
-        src: ../../sites/
-        times: yes
 - name: site permissions
   become: true
   hosts: all
@@ -23,66 +5,19 @@
     - name: site folder ownership
       file:
         group: '{{adminUser}}'
+        mode: 'u=rwx,g=rx,o=rx'
         owner: '{{adminUser}}'
         path: /var/www/sites
-        recurse: true
-    #-@ https://stackoverflow.com/a/28782805/1139122
-    - name: site folder file permissions
-      command: 'find /var/www/sites -type f -exec chmod -c go-wx {} \+'
-      register: tmp
-      changed_when: 'tmp.stdout != ""'
-    - name: site folder directory permissions
-      command: 'find /var/www/sites -type d -exec chmod -c go-w {} \+'
-      register: tmp
-      changed_when: 'tmp.stdout != ""'
+        recurse: false
 - name: prepare tmcom
   become: true
-  become_user: '{{adminUser}}'
-  #-!! env stuff should be handled elsewhere
-  environment:
-    SYMFONY_ENV: '{{tmcomEnv}}'
   hosts: all
   tasks:
-    - name: tmcom var permissions
-      become: true
-      become_user: root
-      shell: 'setfacl -dR -m u:www-data:rwX -m u:{{adminUser}}:rwX var && setfacl -R -m u:www-data:rwX -m u:{{adminUser}}:rwX var'
-      args:
-        chdir: /var/www/sites/tobymackenzie.com
-      #-!! what should be, but doesn't work
-      # acl:
-      #   default: '{{item.default}}'
-      #   entity: '{{item.entity}}'
-      #   etype: user
-      #   path: /var/www/sites/tobymackenzie.com/var
-      #   permissions: rwX
-      #   recursive: true
-      #   state: present
-      # with_items:
-      #   - {default: true, entity: '{{adminUser}}'}
-      #   - {default: false, entity: '{{adminUser}}'}
-      #   - {default: true, entity: www-data}
-      #   - {default: false, entity: www-data}
-    - name: tmcom wp-uploads permissions
-      become: true
-      become_user: root
-      shell: 'setfacl -dR -m u:www-data:rwX -m u:{{adminUser}}:rwX app/files/wp-uploads && setfacl -R -m u:www-data:rwX -m u:{{adminUser}}:rwX app/files/wp-uploads'
-      args:
-        chdir: /var/www/sites/tobymackenzie.com
-    - name: install tmcom deps
-      #-# must discard changes or task will freeze if it finds any
-      shell: '{% if tmcomEnv == "prod" %} export SYMFONY_ENV=prod && export COMPOSER_DISCARD_CHANGES=1 && {% endif %}composer install{% if tmcomEnv == "prod" %} --no-dev --optimize-autoloader --no-interaction{% endif %}'
-      args:
-        chdir: /var/www/sites/tobymackenzie.com
     - name: set up tmcom db
-      become: true
-      become_user: root
       mysql_db:
         name: tmcom
         state: present
     - name: tmcom db user
-      become: true
-      become_user: root
       mysql_user:
         name: tmcom
         password: '{{tmcomDBPassword}}'

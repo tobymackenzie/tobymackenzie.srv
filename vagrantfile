@@ -20,13 +20,10 @@ Vagrant.configure(2) do |config|
 	end
 
 	#==sync local folders
-	#--sites
-	vagrantRoot = File.dirname(__FILE__)
-	#-# couldn't get `exclude-file` to work, so parse em
-	excludeFile = File.open(vagrantRoot + '/provision/sync/sites.exclude', 'r')
-	excludes = excludeFile.read().split("\n")
-	excludeFile.close()
-	config.vm.synced_folder 'sites/', '/var/www/sites', create: true, rsync__args: ['--copy-unsafe-links', '--delete', '--links', '--perms', '--recursive', '--times', '-z'], rsync__auto: false, rsync__exclude: excludes, type: 'rsync'
+	config.trigger.after :reload, :up do |trigger|
+		trigger.run = {inline: 'bin/console deploy -g dev'}
+	end
+
 	#--disable syncing project folder
 	config.vm.synced_folder '.', '/vagrant', disabled: true
 end

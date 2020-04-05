@@ -1,6 +1,9 @@
 imports:
   - {resource: console.php}
+parameters:
+  paths.sites: '%paths.project%/sites'
 services:
+  TJM\ShellRunner\ShellRunner: ~
   TJM\TMCom\Command\:
     autowire: true
     resource: '%paths.project%/src/Command'
