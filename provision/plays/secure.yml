@@ -36,3 +36,13 @@
         rule: allow
       with_items:
         - '{{fw_allow}}'
+- name: manage filesystem permissions
+  become: true
+  hosts: all
+  tasks:
+    - name: allow staff to edit '/usr/local/bin' files
+      file:
+        group: staff #--allow limited privilege updates
+        mode: '2775'
+        owner: root
+        path: /usr/local/bin

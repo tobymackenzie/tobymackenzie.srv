@@ -51,7 +51,7 @@
       when: isComposerInstalled.stat.exists != true
     - name: set composer permissions
       file:
-        group: '{{adminUser}}' #--allow limited privilege updates
+        group: staff #--allow limited privilege updates
         mode: 0775
         owner: root
         path: /usr/local/bin/composer

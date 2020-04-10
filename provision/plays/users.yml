@@ -13,6 +13,12 @@
   become: true
   hosts: all
   tasks:
+    - name: add to staff group
+      user:
+        append: yes
+        groups:
+          - staff
+        name: '{{adminUser}}'
     - name: install ssh key
       lineinfile:
         dest: '/home/{{adminUser}}/.ssh/authorized_keys'
