@@ -21,6 +21,7 @@
           - php-cli
           - php-curl
           - php-fpm
+          - php-gd
           - php-intl
           - php-mbstring
           - php-mysql
