@@ -1,5 +1,6 @@
 - import_playbook: plays/ansible.yml
 - name: vars
+  gather_facts: no
   hosts: all
   tasks:
     - name: load vars
