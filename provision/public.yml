@@ -2,6 +2,7 @@
 - name: vars
   gather_facts: no
   hosts: all
+  no_log: true
   tasks:
     - name: load vars
       include_vars: group_vars/all.yml
