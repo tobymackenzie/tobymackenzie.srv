@@ -1,6 +1,19 @@
 adminUser: ubuntu
 backupRootPath: '/var/bu'
 backupUser: 'backup'
+httpsCerts:
+  dev.tobymackenzie.com:
+    domains:
+      - dev.tobymackenzie.com
+  tobymackenzie.com:
+    domains:
+      - tobymackenzie.com
+      - me.tobymackenzie.com
+      - personal.tobymackenzie.com
+      - webd.tobymackenzie.com
+      - www.tobymackenzie.com
+      - tobymackenzie.name
+      - www.tobymackenzie.name
 dbBackupPath: '{{backupRootPath}}/db'
 dbBackupUser: 'backup'
 fw_allow:
