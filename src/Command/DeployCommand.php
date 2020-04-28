@@ -74,16 +74,26 @@ class DeployCommand extends Base{
 	//-! should move all this out to service(s)
 	protected function runComposer($site, $server){
 		$sitesPath = $this->getContainer()->getParameter('paths.sites');
+		$interactive = true; //-! should be an option from input
 		if($server === 'ubuntu@10.9.8.7'){
-			$command = "composer install";
+			$env = 'dev';
 		}else{
-			$command = "export SYMFONY_ENV=prod && export COMPOSER_DISCARD_CHANGES=1 && composer install --no-dev --optimize-autoloader";
+			$env = 'prod';
 		}
-		echo "runComposer\n";
+		$command = "composer install";
+		if($env === 'prod'){
+			$command = "export SYMFONY_ENV='prod' && {$command} --no-dev --optimize-autoloader";
+		}
+		if(!$interactive){
+			$command = "export COMPOSER_DISCARD_CHANGES="
+				. ($env === 'prod' ? 1 : "'stash'")
+				. " && {$command}"
+			;
+		}
 		return $this->shellRunner->run([
 			'command'=> $command
 			,"host"=> $server
-			,'interactive'=> true //-! should be an option from input
+			,'interactive'=> $interactive
 			,"path"=> "/var/www/sites/{$site}/"
 		]);
 	}
