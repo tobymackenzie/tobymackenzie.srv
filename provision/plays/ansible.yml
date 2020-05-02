@@ -8,5 +8,5 @@
       changed_when:
         - pythonInstall.stdout != ''
         - pythonInstall.stdout != '\r\n'
-      raw: bash -c "test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)"
+      raw: bash -c "test -e /usr/bin/python || (apt -y update && apt install -y python-is-python3)"
       register: pythonInstall
