@@ -26,10 +26,16 @@
         get_mime: false
         path: /etc/letsencrypt/accounts
       register: certbotAccountsStat
+    - name: set up deploy hook
+      copy:
+        dest: /etc/letsencrypt/renewal-hooks/deploy/deploy.sh
+        group: root
+        mode: '0750'
+        owner: root
+        src: ../../assets/etc/letsencrypt/renewal-hooks/deploy/deploy.sh
     - name: set up certs
       command: 'certbot certonly --agree-tos --cert-name {{item.key}} --expand --keep -m admin@tobymackenzie.com -n --webroot --webroot-path /var/www/letsencrypt/ -d {{item.value.domains|default(item.key.split(" "))|join(" -d ")}}'
       changed_when: "'Your certificate and chain have been saved' in certbotResults"
-      notify: 'apache conf change'
       register: certbotResults
       when: certbotAccountsStat.stat.isdir is defined and certbotAccountsStat.stat.isdir
       with_dict: '{{httpsCerts}}'
