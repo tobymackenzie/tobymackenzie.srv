@@ -57,7 +57,7 @@ class BackupCommand extends Base{
 								throw new Exception("Failed running command \`{$config['pre']}\`");
 							}
 						}
-						passthru("rsync -e ssh -aPvx --delete {$customOpts} --link-dest='../_latest' --modify-window=10 --rsync-path='sudo rsync' {$user}@{$host}:{$config['src']} {$config['dest']}/tmp-{$date} && mv {$config['dest']}/tmp-{$date} {$config['dest']}/{$date} && ln -nfs {$config['dest']}/{$date} {$config['dest']}/_latest", $return);
+						passthru("rsync -e ssh -aPvxz --delete {$customOpts} --link-dest='../_latest' --modify-window=10 --rsync-path='sudo rsync' {$user}@{$host}:{$config['src']} {$config['dest']}/tmp-{$date} && mv {$config['dest']}/tmp-{$date} {$config['dest']}/{$date} && ln -nfs {$config['dest']}/{$date} {$config['dest']}/_latest", $return);
 						if($return){
 							throw new Exception("backing up {$name} failed: running \`{$command}\`");
 						}

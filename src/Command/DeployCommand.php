@@ -100,12 +100,12 @@ class DeployCommand extends Base{
 	protected function isComposerChanged($site, $server){
 		$sitesPath = $this->getContainer()->getParameter('paths.sites');
 		return (bool) preg_match('/[<>].* composer\.lock/', $this->shellRunner->run([
-			'command'=> "rsync -ai --dry-run {$sitesPath}/{$site}/composer.lock {$server}:/var/www/sites/{$site}/composer.lock"
+			'command'=> "rsync -aiz --dry-run {$sitesPath}/{$site}/composer.lock {$server}:/var/www/sites/{$site}/composer.lock"
 		]));
 	}
 	protected function syncSite($site, $server, $exclude = null){
 		$sitesPath = $this->getContainer()->getParameter('paths.sites');
-		$syncOpts = "-Dilprt --copy-unsafe-links --delete";
+		$syncOpts = "-Dilprtz --copy-unsafe-links --delete";
 		if($exclude){
 			$syncOpts .= " --exclude-from={$exclude}";
 		}
