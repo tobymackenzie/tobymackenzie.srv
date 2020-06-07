@@ -12,7 +12,7 @@
           - mysql-client
           - mysql-server
           - php-mysql
-          - python-mysqldb #--for mysql_user module
+          - python3-mysqldb #--for mysql_user module
         state: present
     - name: install php
       apt:
