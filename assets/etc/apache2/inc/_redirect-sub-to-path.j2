@@ -1,0 +1,6 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine on
+	RewriteCond %{HTTP_HOST} ^([^\.]+)\.
+	RewriteRule ^/?$ %{REQUEST_SCHEME}://{{item.value.redirect}}/%1 [END,NC,QSA,R=302]
+	RewriteRule ^ %{REQUEST_SCHEME}://{{item.value.redirect}}%{REQUEST_URI} [END,NC,QSA,R=301]
+</IfModule>

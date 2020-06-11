@@ -44,19 +44,28 @@ sites:
     https: true
     httpsCert: tobymackenzie.com
     webroot: /tobymackenzie.com/dist/short/
-  public-alias:
+  public-alias-direct:
     accessLog: tmpublic
     aliases:
       - 'tobymackenzie.com'
-      - '*.tobymackenzie.com'
       - me.tobymackenzie.com
       - personal.tobymackenzie.com
       - webd.tobymackenzie.com
-      - '*.tobymackenzie.name'
       - www.tobymackenzie.name
     https: true
     httpsCert: tobymackenzie.com
     name: tobymackenzie.name
+    redirect: 'www.tobymackenzie.com'
+    sort: 2
+  public-alias-path:
+    accessLog: tmpublic
+    aliases:
+      - '*.tobymackenzie.com'
+      - '*.tobymackenzie.name'
+    confMain: '_redirect-sub-to-path.j2'
+    https: true
+    httpsCert: tobymackenzie.com
+    name: blog.tobymackenzie.com
     redirect: 'www.tobymackenzie.com'
     sort: 2
 tmKey: 'ssh-rsa !!12345 admin@tobymackenzie.com'
