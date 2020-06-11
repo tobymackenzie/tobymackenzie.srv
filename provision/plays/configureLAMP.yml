@@ -188,6 +188,8 @@
       with_items: '{{unneededApacheVhostFiles}}'
 - name: configure mime types
   become: true
+  handlers:
+    - include: ../handlers.yml
   hosts: all
   tasks:
     - name: add woff2
