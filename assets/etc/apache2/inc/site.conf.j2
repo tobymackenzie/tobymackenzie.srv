@@ -4,7 +4,10 @@ ServerName {{item.value.name | default(item.key)}}
 ServerAlias {{alias}}
 {%	endfor %}
 {% endif %}
-{% if item.value.redirect is defined %}
+{% if item.value.confMain is defined %}
+{% include './' + item.value.confMain %}
+
+{% elif item.value.redirect is defined %}
 <IfModule mod_rewrite.c>
 	RewriteEngine on
 	RewriteRule ^ %{REQUEST_SCHEME}://{{item.value.redirect}}%{REQUEST_URI} [NC,L,QSA,R=301]
@@ -18,7 +21,7 @@ DocumentRoot /var/www/sites{{item.value.webroot|default('/')}}
 	Order allow,deny
 	allow from all
 </Directory>
-#==logs
 {% endif %}
+#==logs
 CustomLog ${APACHE_LOG_DIR}/{{item.value.accessLog|default(item.key)}}-access.log vhost_combined
 ErrorLog ${APACHE_LOG_DIR}/{{errorLog.value.log|default('sites')}}-error.log
