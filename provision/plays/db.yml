@@ -1,0 +1,24 @@
+- name: install db
+  become: true
+  hosts: all
+    - name: install mysql
+      apt:
+        name:
+          - mysql-client
+          - mysql-server
+          - python3-pymysql #--for mysql_user module
+        state: present
+- name: configure db
+  become: true
+  hosts: all
+  tasks:
+    - name: set root mysql password
+      mysql_user:
+        name: root
+        password: '{{dbRootPassword}}'
+        state: present
+    - name: add root my.cnf for future logins
+      template:
+        dest: /root/.my.cnf
+        mode: 0600
+        src: ../../assets/root/.my.cnf

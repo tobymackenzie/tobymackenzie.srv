@@ -1,18 +1,10 @@
-- name: install lamp
+- name: install web
   become: true
   hosts: all
   tasks:
     - name: install apache
       apt:
         name: apache2
-        state: present
-    - name: install mysql
-      apt:
-        name:
-          - mysql-client
-          - mysql-server
-          - php-mysql
-          - python3-mysqldb #--for mysql_user module
         state: present
     - name: install php
       apt:

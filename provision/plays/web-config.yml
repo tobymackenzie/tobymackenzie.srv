@@ -186,30 +186,10 @@
         path: '{{item}}'
         state: absent
       with_items: '{{unneededApacheVhostFiles}}'
-- name: configure mime types
-  become: true
-  handlers:
-    - include: ../handlers.yml
-  hosts: all
-  tasks:
-    - name: add woff2
+    - name: add woff2 mime type
       lineinfile:
         dest: /etc/mime.types
         line: 'font/woff2                          woff2'
         regexp: '^.*woff2$'
         state: present
       notify: 'apache conf change'
-- name: configure mysql
-  become: true
-  hosts: all
-  tasks:
-    - name: set root mysql password
-      mysql_user:
-        name: root
-        password: '{{dbRootPassword}}'
-        state: present
-    - name: add root my.cnf for future logins
-      template:
-        dest: /root/.my.cnf
-        mode: 0600
-        src: ../../assets/root/.my.cnf
