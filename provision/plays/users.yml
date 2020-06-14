@@ -13,11 +13,12 @@
   become: true
   hosts: all
   tasks:
-    - name: add to staff group
+    - name: add to admin groups
       user:
         append: yes
         groups:
-          - staff
+          - staff #--allow installing to /usr/local/bin
+          - sudo #--allow sudo
         name: '{{adminUser}}'
     - name: install ssh key
       lineinfile:
