@@ -197,3 +197,16 @@
       copy:
         dest: '/etc/logrotate.d/apache2'
         src: '../../assets/etc/logrotate.d/apache2'
+- name: configure php
+  become: true
+  handlers:
+    - include: ../handlers.yml
+  hosts: all
+  tasks:
+    - name: configure max children
+      lineinfile:
+        dest: '/etc/php/7.4/fpm/pool.d/www.conf'
+        line: 'pm.max_children = 16'
+        regexp: '^pm\.max_children ='
+        state: present
+      notify: restart php

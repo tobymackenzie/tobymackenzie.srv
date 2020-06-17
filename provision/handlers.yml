@@ -1,6 +1,10 @@
 - name: restart apache
   command: 'apachectl graceful'
   listen: 'apache conf change'
+- name: restart php
+  service:
+    name: php7.4-fpm
+    state: restarted
 - name: restart ssh
   service:
     name: ssh
