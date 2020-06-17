@@ -193,3 +193,7 @@
         regexp: '^.*woff2$'
         state: present
       notify: 'apache conf change'
+    - name: configure web log rotatation
+      copy:
+        dest: '/etc/logrotate.d/apache2'
+        src: '../../assets/etc/logrotate.d/apache2'
