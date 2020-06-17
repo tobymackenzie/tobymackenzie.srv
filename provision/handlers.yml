@@ -3,7 +3,7 @@
   listen: 'apache conf change'
 - name: restart php
   service:
-    name: php7.4-fpm
+    name: 'php{{phpVersion}}-fpm'
     state: restarted
 - name: restart ssh
   service:
