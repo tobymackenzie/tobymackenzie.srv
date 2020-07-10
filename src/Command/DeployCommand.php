@@ -105,13 +105,21 @@ class DeployCommand extends Base{
 	}
 	protected function syncSite($site, $server, $exclude = null){
 		$sitesPath = $this->getContainer()->getParameter('paths.sites');
+		$paths = ["/"];
+		if($site === 'tobymackenzie.com'){
+			$paths[] = "/src/PublicApp/Resources/public/icons/";
+		}
 		$syncOpts = "-Dilprtz --copy-unsafe-links --delete";
 		if($exclude){
 			$syncOpts .= " --exclude-from={$exclude}";
 		}
-		return $this->shellRunner->run([
-			'command'=> "rsync {$syncOpts} {$sitesPath}/{$site}/ {$server}:/var/www/sites/{$site}/"
-		]);
+		$result = [];
+		foreach($paths as $path){
+			$result[] = $this->shellRunner->run([
+				'command'=> "rsync {$syncOpts} {$sitesPath}/{$site}/{$path} {$server}:/var/www/sites/{$site}/{$path}/"
+			]);
+		}
+		return implode("\n", $result);
 	}
 	protected function setSitePermissions($site, $server, $additional = null){
 		$sitesPath = $this->getContainer()->getParameter('paths.sites');
