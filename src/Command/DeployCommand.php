@@ -107,7 +107,7 @@ class DeployCommand extends Base{
 		$sitesPath = $this->getContainer()->getParameter('paths.sites');
 		$paths = ["/"];
 		if($site === 'tobymackenzie.com'){
-			$paths[] = "/src/PublicApp/Resources/public/icons/";
+			$paths[] = "/dist/public/_assets/icons/";
 		}
 		$syncOpts = "-Dilprtz --copy-unsafe-links --delete";
 		if($exclude){

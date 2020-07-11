@@ -7,7 +7,8 @@ node_modules/
 /config/*.local.php
 /config/*.local.yml
 /app/files/wp-uploads/*
-/src/PublicApp/Resources/public/icons/
+/dist/public/_assets/icons/
+/dist/public/_assets-dev
 /var/cache/*
 /var/logs/*
 /var/sessions/*
