@@ -55,6 +55,8 @@ class DeployCommand extends Base{
 					]));
 					if($isComposerChanged){
 						$this->runComposer($site, $server);
+					}else{
+						$this->runComposer($site, $server, 'run post');
 					}
 				break;
 				case 'dev.tobymackenzie.com':
@@ -72,7 +74,7 @@ class DeployCommand extends Base{
 
 	//==deployment
 	//-! should move all this out to service(s)
-	protected function runComposer($site, $server){
+	protected function runComposer($site, $server, $subcommand = 'install'){
 		$sitesPath = $this->getContainer()->getParameter('paths.sites');
 		$interactive = true; //-! should be an option from input
 		if($server === 'ubuntu@10.9.8.7'){
@@ -80,9 +82,12 @@ class DeployCommand extends Base{
 		}else{
 			$env = 'prod';
 		}
-		$command = "composer install";
+		$command = "composer {$subcommand}";
 		if($env === 'prod'){
-			$command = "export SYMFONY_ENV='prod' && {$command} --no-dev --optimize-autoloader";
+			$command = "export SYMFONY_ENV='prod' && {$command} --no-dev";
+			if($subcommand === 'install'){
+				$command .= " --optimize-autoloader";
+			}
 		}
 		if(!$interactive){
 			$command = "export COMPOSER_DISCARD_CHANGES="
