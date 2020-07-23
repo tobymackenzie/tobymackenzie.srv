@@ -25,6 +25,7 @@ fw_allow:
   - { port: 80, proto: tcp }
   - { port: 443, proto: tcp }
   - { port: 2784, proto: tcp } # original http port
+phpVersion: 7.4
 serverName: 'tobymackenzie.com'
 sites:
   tobymackenzie.com:
