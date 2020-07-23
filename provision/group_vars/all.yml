@@ -5,6 +5,7 @@ httpsCerts:
   dev.tobymackenzie.com:
     domains:
       - dev.tobymackenzie.com
+      - dev.macn.me
   tobymackenzie.com:
     domains:
       - tobymackenzie.com
@@ -15,6 +16,8 @@ httpsCerts:
       - www.tobymackenzie.com
       - tobymackenzie.name
       - www.tobymackenzie.name
+      - macn.me
+      - www.macn.me
 dbBackupPath: '{{backupRootPath}}/db'
 dbBackupUser: 'backup'
 fw_allow:
@@ -44,6 +47,7 @@ sites:
     accessLog: short
     https: true
     httpsCert: tobymackenzie.com
+    name: macn.me
     webroot: /tobymackenzie.com/dist/short/
   public-alias-direct:
     accessLog: tmpublic
