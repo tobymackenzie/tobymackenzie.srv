@@ -8,6 +8,7 @@ httpsCerts:
   tobymackenzie.com:
     domains:
       - tobymackenzie.com
+      - blog.tobymackenzie.com
       - me.tobymackenzie.com
       - personal.tobymackenzie.com
       - webd.tobymackenzie.com
