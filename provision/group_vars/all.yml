@@ -41,6 +41,7 @@ sites:
     accessLog: tmdev
     aliases:
       - t.dev.tobymackenzie.com
+      - dev.macn.me
     https: true
     httpsCert: dev.tobymackenzie.com
     webroot: /dev.tobymackenzie.com
