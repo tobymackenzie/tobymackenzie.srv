@@ -48,3 +48,7 @@
         mode: 0775
         owner: root
         path: /usr/local/bin/composer
+    - name: install imagemagick
+      apt:
+        name: imagemagick
+        state: present
