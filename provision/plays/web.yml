@@ -1,5 +1,7 @@
 - name: install web
   become: true
+  handlers:
+    - include: ../handlers.yml
   hosts: all
   tasks:
     - name: install apache
@@ -9,10 +11,12 @@
     - name: install php
       apt:
         name:
+          - imagemagick
           - php
           - php-cli
           - php-curl
           - php-fpm
+          - php-imagick
           - php-gd
           - php-intl
           - php-mbstring
@@ -20,6 +24,7 @@
           - php-xml
           - php-zip #-- for composer
         state: present
+      notify: 'restart php'
     - name: check composer's existence
       stat:
         path: '/usr/local/bin/composer'
@@ -48,7 +53,3 @@
         mode: 0775
         owner: root
         path: /usr/local/bin/composer
-    - name: install imagemagick
-      apt:
-        name: imagemagick
-        state: present
