@@ -1,6 +1,11 @@
 adminUser: ubuntu
 backupRootPath: '/var/bu'
 backupUser: 'backup'
+db:
+  tmcom:
+    name: tmcom
+    password: '{{tmcomDBPassword}}'
+    user: tmcom
 httpsCerts:
   dev.tobymackenzie.com:
     domains:

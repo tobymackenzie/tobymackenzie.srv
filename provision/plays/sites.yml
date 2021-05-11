@@ -15,11 +15,15 @@
   tasks:
     - name: set up tmcom db
       mysql_db:
-        name: tmcom
+        name: '{{item.value.name}}'
         state: present
+      no_log: true
+      with_dict: '{{db}}'
     - name: tmcom db user
       mysql_user:
-        name: tmcom
-        password: '{{tmcomDBPassword}}'
-        priv: 'tmcom.*:ALL'
+        name: '{{item.value.user}}'
+        password: '{{item.value.password}}'
+        priv: '{{item.value.name}}.*:ALL'
         state: present
+      no_log: true
+      with_dict: '{{db}}'
