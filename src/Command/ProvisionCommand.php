@@ -14,6 +14,7 @@ class ProvisionCommand extends Base{
 			->setDescription('Provision server group.')
 			->addArgument('group', InputArgument::REQUIRED, 'Name of server group to provision.  Matches YAML file in "provision" directory.')
 			->addOption('book', 'b', InputOption::VALUE_REQUIRED, 'Run playbook by name, from `provision/plays` folder')
+			->addOption('dry-run', 'd', InputOption::VALUE_NONE, 'Don\'t change anything, just report what changes would be made.')
 			->addOption('list-tasks', 'l', InputOption::VALUE_NONE, 'List tasks instead of run them')
 			->addOption('start-at-task', null, InputOption::VALUE_REQUIRED, 'Start at task name')
 		;
@@ -35,6 +36,9 @@ class ProvisionCommand extends Base{
 				}
 				$inventoryFile = $projectPath . "/provision/hosts/{$group}.yml";
 				$command = "ansible-playbook --diff -i {$inventoryFile}";
+				if($input->getOption('dry-run')){
+					$command .= ' --check';
+				}
 				if($input->getOption('list-tasks')){
 					$command .= ' --list-tasks';
 				}
