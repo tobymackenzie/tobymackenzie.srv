@@ -13,13 +13,13 @@
   become: true
   hosts: all
   tasks:
-    - name: set up tmcom db
+    - name: set up dbs
       mysql_db:
         name: '{{item.value.name}}'
         state: present
       no_log: true
       with_dict: '{{db}}'
-    - name: tmcom db user
+    - name: set up db users
       mysql_user:
         name: '{{item.value.user}}'
         password: '{{item.value.password}}'
