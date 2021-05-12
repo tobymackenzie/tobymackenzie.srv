@@ -2,7 +2,7 @@
 <VirtualHost *:80{% if item.value.sort is defined and item.value.sort == 0 %} *:2784{% endif %}>
 	Include inc/{{item.key}}.conf
 </VirtualHost>
-{% if item.value.https %}
+{% if item.value.https|default(false) %}
 {%	set httpsCert = item.value.httpsCert|default(item.key) %}
 {%	if httpsCert in httpsCerts %}
 <IfModule mod_ssl.c>
