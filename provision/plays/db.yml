@@ -17,7 +17,9 @@
         name: root
         password: '{{dbRootPassword}}'
         state: present
+      no_log: true
     - name: add root my.cnf for future logins
+      no_log: true
       template:
         dest: /root/.my.cnf
         mode: 0600
