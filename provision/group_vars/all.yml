@@ -84,3 +84,6 @@ tmKey: 'ssh-rsa !!12345 admin@tobymackenzie.com'
 tmcomEnv: 'prod'
 workKey: 'ssh-rsa !!12345 admin@tobymackenzie.com'
 workUser: wrk
+
+#==ansible
+ansible_python_interpreter: '/usr/bin/python3'
