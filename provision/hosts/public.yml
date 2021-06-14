@@ -4,6 +4,7 @@ all:
       ansible_user: ubuntu
   vars:
     dbRootPassword: '!!12345'
+    tifDBPassword: '!!12345'
     tmcomDBPassword: '!!12345'
     dbBackupPassword: '!!12345'
     tmcomEnv: prod

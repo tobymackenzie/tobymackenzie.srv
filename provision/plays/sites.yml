@@ -9,7 +9,7 @@
         owner: '{{adminUser}}'
         path: /var/www/sites
         recurse: false
-- name: prepare tmcom
+- name: prepare site db
   become: true
   hosts: all
   tasks:

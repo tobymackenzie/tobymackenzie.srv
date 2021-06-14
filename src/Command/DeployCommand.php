@@ -41,6 +41,7 @@ class DeployCommand extends Base{
 		}
 		foreach($input->getArgument('site') as $site){
 			switch($site){
+				//==personal
 				case 'tobymackenzie.com':
 				case 'tm':
 				case 'tmcom':
@@ -65,6 +66,20 @@ class DeployCommand extends Base{
 					$output->writeln($this->syncSite($site, $server, $container->getParameter('paths.project') . "/config/sync/site.exclude"));
 					$output->writeln($this->setSitePermissions($site, $server));
 				break;
+				//==clients
+				case 'ctm':
+				case 'cheftiffanymiller.com':
+					$site = 'cheftiffanymiller.com';
+					$isComposerChanged = $this->isComposerChanged($site, $server);
+					$output->writeln($this->syncSite($site, $server, $container->getParameter('paths.project') . "/config/sync/ctm.exclude"));
+					$output->writeln($this->setSitePermissions($site, $server, [
+						//-! special permissions coming from site `bin/ready` script. should be a better way to do this that works for both local and remote and can account for site specific stuff without allowing the site to run arbitrary code as root
+					]));
+					if($isComposerChanged){
+						$this->runComposer($site, $server);
+					}
+					$this->runForSite($site, $server, 'bin/ready');
+				break;
 				default:
 					throw new Exception("Site {$site} unknown");
 				break;
@@ -74,6 +89,14 @@ class DeployCommand extends Base{
 
 	//==deployment
 	//-! should move all this out to service(s)
+	protected function runForSite($site, $server, $command, $interactive = true){
+		return $this->shellRunner->run([
+			'command'=> $command
+			,"host"=> $server
+			,'interactive'=> $interactive
+			,"path"=> "/var/www/sites/{$site}/"
+		]);
+	}
 	protected function runComposer($site, $server, $subcommand = 'install'){
 		$sitesPath = $this->getContainer()->getParameter('paths.sites');
 		$interactive = true; //-! should be an option from input
@@ -128,7 +151,7 @@ class DeployCommand extends Base{
 	}
 	protected function setSitePermissions($site, $server, $additional = null){
 		$sitesPath = $this->getContainer()->getParameter('paths.sites');
-		//-! user should come from config
+		//-! user / group should come from config
 		$command = "sudo chown -R ubuntu:ubuntu .";
 		$command .= " && sudo find . -type f -exec chmod go-wx {} \+";
 		$command .= " && sudo find . -type d -exec chmod go-w {} \+";

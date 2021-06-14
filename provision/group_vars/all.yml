@@ -2,10 +2,16 @@ adminUser: ubuntu
 backupRootPath: '/var/bu'
 backupUser: 'backup'
 db:
+  ##==personal
   tmcom:
     name: tmcom
     password: '{{tmcomDBPassword}}'
     user: tmcom
+  ##==client
+  tif:
+    name: tif
+    password: '{{tifDBPassword}}'
+    user: tif
 httpsCerts:
   dev.tobymackenzie.com:
     domains:
@@ -33,6 +39,7 @@ fw_allow:
 phpVersion: 7.4
 serverName: 'tobymackenzie.com'
 sites:
+  ##==personal
   tobymackenzie.com:
     accessLog: tmpublic
     https: true
@@ -80,6 +87,14 @@ sites:
     name: blog.tobymackenzie.com
     redirect: 'www.tobymackenzie.com'
     sort: 2
+  ##==client
+  cheftiffanymiller.com:
+    accessLog: cheftiffanymiller.com
+    aliases:
+      - '*.cheftiffanymiller.com'
+      - ctm.macn.me
+    sort: 1
+    webroot: /cheftiffanymiller.com/www
 tmKey: 'ssh-rsa !!12345 admin@tobymackenzie.com'
 tmcomEnv: 'prod'
 workKey: 'ssh-rsa !!12345 admin@tobymackenzie.com'
