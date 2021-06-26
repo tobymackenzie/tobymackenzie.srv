@@ -1,0 +1,12 @@
+.DS_Store
+.git
+/config/.env*
+/config/*local.php
+/config/htpasswd
+/config/Migrations/*.lock
+/config/Seeds
+/logs/*
+/tests/
+/tmp/*
+/vendor/
+/webroot/.well-known/

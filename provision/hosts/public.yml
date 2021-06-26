@@ -7,6 +7,7 @@ all:
     tifDBPassword: '!!12345'
     tmcomDBPassword: '!!12345'
     dbBackupPassword: '!!12345'
+    dwDBPassword: '!!12345'
     tmcomEnv: prod
 prod:
   hosts:

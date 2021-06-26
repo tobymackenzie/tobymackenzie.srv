@@ -11,6 +11,7 @@
         dbRootPassword: '!!12345'
         tmcomDBPassword: '!!12345'
         dbBackupPassword: '!!12345'
+        dwDBPassword: '!!12345'
         tifDBPassword: '!!12345'
         tmcomEnv: dev
 - import_playbook: plays/main.yml

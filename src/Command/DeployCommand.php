@@ -80,6 +80,23 @@ class DeployCommand extends Base{
 					}
 					$this->runForSite($site, $server, 'bin/ready');
 				break;
+				case 'dw':
+					$site = 'dw';
+					$isComposerChanged = $this->isComposerChanged($site, $server);
+					$output->writeln($this->syncSite($site, $server, $container->getParameter('paths.project') . "/config/sync/dw.exclude"));
+					$output->writeln($this->setSitePermissions($site, $server, [
+						'sudo setfacl -R -m u:www-data:rwx tmp',
+						'sudo setfacl -dR -m u:www-data:rwx tmp',
+						'sudo setfacl -R -m u:www-data:rwx logs',
+						'sudo setfacl -dR -m u:www-data:rwx logs',
+					]));
+					if($isComposerChanged){
+						$this->runComposer($site, $server);
+					}
+					//-! ideally we'd set database config on first run only and then run migrations
+					//-! `vi config/app_local.php`
+					$this->runForSite($site, $server, 'bin/cake migrations migrate');
+				break;
 				default:
 					throw new Exception("Site {$site} unknown");
 				break;

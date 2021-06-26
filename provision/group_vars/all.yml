@@ -8,6 +8,10 @@ db:
     password: '{{tmcomDBPassword}}'
     user: tmcom
   ##==client
+  dw:
+    name: dw
+    password: '{{dwDBPassword}}'
+    user: dw
   tif:
     name: tif
     password: '{{tifDBPassword}}'
@@ -95,6 +99,10 @@ sites:
       - ctm.macn.me
     sort: 1
     webroot: /cheftiffanymiller.com/www
+  dw.macn.me:
+    accessLog: dw.site
+    sort: 1
+    webroot: /dw/webroot
 tmKey: 'ssh-rsa !!12345 admin@tobymackenzie.com'
 tmcomEnv: 'prod'
 workKey: 'ssh-rsa !!12345 admin@tobymackenzie.com'
