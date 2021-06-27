@@ -144,9 +144,14 @@ class DeployCommand extends Base{
 	}
 	protected function isComposerChanged($site, $server){
 		$sitesPath = $this->getContainer()->getParameter('paths.sites');
-		return (bool) preg_match('/[<>].* composer\.lock/', $this->shellRunner->run([
-			'command'=> "rsync -aiz --dry-run {$sitesPath}/{$site}/composer.lock {$server}:/var/www/sites/{$site}/composer.lock"
-		]));
+		try{
+			$syncTest = $this->shellRunner->run([
+				'command'=> "rsync -aiz --dry-run {$sitesPath}/{$site}/composer.lock {$server}:/var/www/sites/{$site}/composer.lock"
+			]);
+		}catch(Exception $e){
+			return true;
+		}
+		return (bool) preg_match('/[<>].* composer\.lock/', $syncTest);
 	}
 	protected function syncSite($site, $server, $exclude = null){
 		$sitesPath = $this->getContainer()->getParameter('paths.sites');
