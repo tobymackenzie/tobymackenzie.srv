@@ -17,6 +17,7 @@ db:
     password: '{{tifDBPassword}}'
     user: tif
 httpsCerts:
+  ##==personal
   dev.tobymackenzie.com:
     domains:
       - dev.tobymackenzie.com
@@ -33,6 +34,10 @@ httpsCerts:
       - www.tobymackenzie.name
       - macn.me
       - www.macn.me
+  ##==client
+  cheftiffanymiller.com:
+    domains:
+      - cheftiffanymiller.com
 dbBackupPath: '{{backupRootPath}}/db'
 dbBackupUser: 'backup'
 fw_allow:
@@ -97,6 +102,8 @@ sites:
     aliases:
       - '*.cheftiffanymiller.com'
       - ctm.macn.me
+    https: true
+    httpsCert: cheftiffanymiller.com
     sort: 1
     webroot: /cheftiffanymiller.com/www
   dw.macn.me:
