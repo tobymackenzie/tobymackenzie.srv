@@ -1,6 +1,7 @@
 - name: install db
   become: true
   hosts: all
+  tasks:
     - name: install mysql
       apt:
         name:
