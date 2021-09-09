@@ -10,3 +10,7 @@
         - pythonInstall.stdout != '\r\n'
       raw: bash -c "test -e /usr/bin/python || (apt -y update && apt install -y python-is-python3)"
       register: pythonInstall
+    - name: install acl # required for becoming different users
+      apt:
+        name: acl
+        state: present
