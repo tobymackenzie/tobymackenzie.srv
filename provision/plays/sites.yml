@@ -2,13 +2,14 @@
   become: true
   hosts: all
   tasks:
-    - name: site folder ownership
+    - name: create site folder with ownership
       file:
         group: '{{adminUser}}'
         mode: 'u=rwx,g=rx,o=rx'
         owner: '{{adminUser}}'
         path: /var/www/sites
         recurse: false
+        state: directory
 - name: prepare site db
   become: true
   hosts: all
