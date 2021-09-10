@@ -3,6 +3,8 @@
   handlers:
     - include: ../handlers.yml
   hosts: all
+  vars:
+    installedHttpsCerts: {}
   tasks:
     - name: get list of installed certs
       find:
@@ -14,7 +16,8 @@
     ##--make letsencrypt cert installed check easier to use in templates
     - name: format letsencrypt cert data for consumption
       set_fact:
-        httpsCerts: "{{httpsCerts|default([])}} + ['{{item.path|basename}}']"
+        installedHttpsCerts: "{{installedHttpsCerts | combine({item.path|basename: httpsCerts[item.path|basename]})}}"
+      when: 'httpsCerts[item.path|basename] is defined'
       with_items: '{{enabledLetsEncryptFiles.files}}'
     - name: configure server name
       lineinfile:

@@ -4,7 +4,7 @@
 </VirtualHost>
 {% if item.value.https|default(false) %}
 {%	set httpsCert = item.value.httpsCert|default(item.key) %}
-{%	if httpsCert in httpsCerts %}
+{%	if httpsCert in installedHttpsCerts %}
 <IfModule mod_ssl.c>
 	<VirtualHost *:443>
 		Include inc/{{item.key}}.conf
