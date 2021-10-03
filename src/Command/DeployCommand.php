@@ -30,6 +30,8 @@ class DeployCommand extends Base{
 		switch($group){
 			case 'dev':
 				$server = 'ubuntu@10.9.8.7';
+				throw new Exception("'dev' group cannot currently be deployed with this command.  Deployment is handled automatically via Vagrant, with sites mounted into place.");
+				//-! we need a way to test deployment locally while still supporting dev with local files
 			break;
 			case 'public':
 			case 'prod':
