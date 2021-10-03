@@ -29,9 +29,9 @@ class DeployCommand extends Base{
 		$group = $input->getOption('group');
 		switch($group){
 			case 'dev':
-				$server = 'ubuntu@10.9.8.7';
 				throw new Exception("'dev' group cannot currently be deployed with this command.  Deployment is handled automatically via Vagrant, with sites mounted into place.");
 				//-! we need a way to test deployment locally while still supporting dev with local files
+				$server = 'ubuntu@10.9.9.9';
 			break;
 			case 'public':
 			case 'prod':
@@ -119,7 +119,7 @@ class DeployCommand extends Base{
 	protected function runComposer($site, $server, $subcommand = 'install'){
 		$sitesPath = $this->getContainer()->getParameter('paths.sites');
 		$interactive = true; //-! should be an option from input
-		if($server === 'ubuntu@10.9.8.7'){
+		if($server === 'ubuntu@10.9.9.9'){
 			$env = 'dev';
 		}else{
 			$env = 'prod';
