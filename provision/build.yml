@@ -1,0 +1,10 @@
+- import_playbook: plays/ansible.yml
+- name: vars
+  gather_facts: no
+  hosts: all
+  no_log: true
+  tasks:
+    - name: load vars
+      include_vars: group_vars/all.yml
+- import_playbook: plays/users.yml
+- import_playbook: plays/build.yml

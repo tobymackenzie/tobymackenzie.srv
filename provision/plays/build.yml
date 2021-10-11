@@ -1,0 +1,22 @@
+- name: install build software
+  become: true
+  hosts: all
+  tasks:
+    - name: install php
+      apt:
+        name:
+          - php
+          - php-cli
+        state: present
+    - name: install css build packages
+      apt:
+        name:
+          - node-postcss
+          - sassc
+        state: present
+    - name: install js build packages
+      apt:
+        name:
+          - rollup
+          - uglifyjs
+        state: present

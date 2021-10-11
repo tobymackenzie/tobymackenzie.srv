@@ -33,4 +33,33 @@ Vagrant.configure(2) do |config|
 		#--disable syncing project folder
 		web.vm.synced_folder '.', '/vagrant', disabled: true
 	end
+	config.vm.define 'build' do |build|
+		build.vm.box = 'ubuntu/focal64'
+
+		#==network
+		build.vm.network 'private_network', ip: '10.9.9.8'
+		#--connect to internet
+		#-@ https://stackoverflow.com/a/18457420/1139122
+		build.vm.provider 'virtualbox' do |vb|
+			vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
+			vb.customize ['modifyvm', :id, '--natdnsproxy1', 'on']
+		end
+
+		#==provision
+		#-@ [official](http://docs.ansible.com/ansible/guide_vagrant.html)
+		build.vm.provision 'ansible' do |ansible|
+			ansible.verbose = 'v'
+			ansible.playbook = 'provision/build.yml'
+		end
+
+		#==sync local folders
+		#--sync sites folders
+		build.vm.synced_folder './sites/cheftiffanymiller.com', '/var/www/sites/cheftiffanymiller.com', owner: 'ubuntu', group: 'ubuntu'
+		build.vm.synced_folder './sites/dev.tobymackenzie.com', '/var/www/sites/dev.tobymackenzie.com', owner: 'ubuntu', group: 'ubuntu'
+		build.vm.synced_folder './sites/dw', '/var/www/sites/dw', owner: 'ubuntu', group: 'ubuntu'
+		build.vm.synced_folder './sites/tobymackenzie.com', '/var/www/sites/tobymackenzie.com', owner: 'ubuntu', group: 'ubuntu'
+
+		#--disable syncing project folder
+		build.vm.synced_folder '.', '/vagrant', disabled: true
+	end
 end
