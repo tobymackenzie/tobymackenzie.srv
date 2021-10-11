@@ -37,38 +37,3 @@
         line: '{{tmKey}}'
         state: present
 #-!! should have an unprivileged user for owning and editing web files
-#--user for accessing from work
-- name: set up work user
-  become: true
-  hosts: [prod, public]
-  tasks:
-    - name: add work user
-      user:
-        name: '{{workUser}}'
-        state: present
-    - name: create work user ssh dir
-      file:
-        group: '{{workUser}}'
-        mode: 0700
-        owner: '{{workUser}}'
-        path: '/home/{{workUser}}/.ssh'
-        state: directory
-    - name: create work user keys file
-      #-# copy used because 'file' module can't create the file, see <https://stackoverflow.com/a/34929776/1139122>
-      copy:
-        content: ''
-        dest: '/home/{{workUser}}/.ssh/authorized_keys'
-        force: no
-        group: '{{workUser}}'
-        mode: 0600
-        owner: '{{workUser}}'
-    - name: install work user key
-      lineinfile:
-        dest: '/home/{{workUser}}/.ssh/authorized_keys'
-        line: '{{workKey}}'
-        state: present
-    - name: install tm ssh key for work
-      lineinfile:
-        dest: '/home/{{workUser}}/.ssh/authorized_keys'
-        line: '{{tmKey}}'
-        state: present
