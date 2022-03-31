@@ -68,6 +68,12 @@ class DeployCommand extends Base{
 					$output->writeln($this->syncSite($site, $server, $container->getParameter('paths.project') . "/config/sync/site.exclude"));
 					$output->writeln($this->setSitePermissions($site, $server));
 				break;
+				//==personal - etc
+				case '10kgol':
+					$site = '10k-gol.site';
+					$output->writeln($this->syncSite($site, $server, $container->getParameter('paths.project') . "/config/sync/10kgol.exclude"));
+					$output->writeln($this->setSitePermissions($site, $server));
+				break;
 				//==clients
 				case 'ctm':
 				case 'cheftiffanymiller.com':

@@ -20,6 +20,7 @@ httpsCerts:
   ##==personal
   dev.tobymackenzie.com:
     domains:
+      - 10kgol.macn.me
       - dev.tobymackenzie.com
       - dev.macn.me
   tobymackenzie.com:
@@ -96,6 +97,16 @@ sites:
     name: blog.tobymackenzie.com
     redirect: 'www.tobymackenzie.com'
     sort: 2
+  ##--etc
+  10kgol:
+    accessLog: tmdev
+    aliases:
+      - 10k-gol.macn.me
+      - 10kgol.t
+    https: true
+    httpsCert: dev.tobymackenzie.com
+    name: 10kgol.macn.me
+    webroot: /10k-gol.site
   ##==client
   cheftiffanymiller.com:
     accessLog: cheftiffanymiller.com

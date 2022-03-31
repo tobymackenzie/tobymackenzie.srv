@@ -1,0 +1,12 @@
+.DS_Store
+.git
+/.git/
+/.gitignore
+/.well-known/
+/bin/
+/composer.*
+/postcss.json
+/README.md
+/src/run/cli.php
+/src/scripts/
+/src/styles/
