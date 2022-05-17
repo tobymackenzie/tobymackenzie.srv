@@ -174,7 +174,7 @@ class DeployCommand extends Base{
 		$result = [];
 		foreach($paths as $path){
 			$result[] = $this->shellRunner->run([
-				'command'=> "rsync {$syncOpts} {$sitesPath}/{$site}/{$path} {$server}:/var/www/sites/{$site}/{$path}/"
+				'command'=> "rsync {$syncOpts} {$sitesPath}/{$site}{$path} {$server}:/var/www/sites/{$site}{$path}"
 			]);
 		}
 		return implode("\n", $result);
