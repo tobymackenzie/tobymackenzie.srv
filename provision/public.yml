@@ -5,5 +5,7 @@
   no_log: true
   tasks:
     - name: load vars
-      include_vars: group_vars/all.yml
+      include_vars:
+        dir: vars
+        files_matching: '.*\.yml'
 - import_playbook: plays/main.yml

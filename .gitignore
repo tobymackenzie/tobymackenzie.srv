@@ -6,6 +6,7 @@
 /.vagrant
 /*.log
 /composer.lock
+/provision/vars/*local.yml
 /sites/*
 !/sites/default
 /vendor
