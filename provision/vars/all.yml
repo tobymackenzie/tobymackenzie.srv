@@ -35,6 +35,9 @@ httpsCerts:
       - www.tobymackenzie.name
       - macn.me
       - www.macn.me
+  tmprivate:
+    domains:
+      - '{{tmprivateDomain|default("private.macn.me")}}'
   ##==client
   cheftiffanymiller.com:
     domains:
@@ -49,6 +52,7 @@ fw_allow:
 phpVersion: 7.4
 serverName: 'tobymackenzie.com'
 sites:
+  ##==personal
   ##==personal
   tobymackenzie.com:
     accessLog: tmpublic
@@ -97,6 +101,13 @@ sites:
     name: blog.tobymackenzie.com
     redirect: 'www.tobymackenzie.com'
     sort: 2
+  ##--private
+  tmprivate:
+    accessLog: tmprivate
+    https: true
+    httpsCert: tmprivate
+    name: '{{tmprivateDomain|default("private.macn.me")}}'
+    webroot: /tmprivate/dist
   ##--etc
   10kgol:
     accessLog: tmdev
