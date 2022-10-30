@@ -20,4 +20,5 @@
         name:
           - rollup
           - uglifyjs
+          - yarnpkg
         state: present
