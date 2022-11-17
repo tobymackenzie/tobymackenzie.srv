@@ -1,6 +1,0 @@
-.DS_Store
-.git
-/config/*local.php
-/vendor/
-/www/.well-known/
-/www/_content/uploads

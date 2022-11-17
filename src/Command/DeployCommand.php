@@ -50,7 +50,7 @@ class DeployCommand extends Base{
 				case 'tmweb':
 					$site = 'tobymackenzie.com';
 					$isComposerChanged = $this->isComposerChanged($site, $server);
-					$output->writeln($this->syncSite($site, $server, $container->getParameter('paths.project') . "/config/sync/tmweb.exclude"));
+					$output->writeln($this->syncSite($site, $server));
 					//-! users should come from config
 					$output->writeln($this->setSitePermissions($site, $server, [
 						"setfacl -dR -m u:www-data:rwX -m u:ubuntu:rwX var && setfacl -R -m u:www-data:rwX -m u:ubuntu:rwX var"
@@ -65,7 +65,7 @@ class DeployCommand extends Base{
 				case 'dev.tobymackenzie.com':
 				case 'dev':
 					$site = 'dev.tobymackenzie.com';
-					$output->writeln($this->syncSite($site, $server, $container->getParameter('paths.project') . "/config/sync/site.exclude"));
+					$output->writeln($this->syncSite($site, $server));
 					$output->writeln($this->setSitePermissions($site, $server));
 				break;
 				//==personal - etc
@@ -73,7 +73,7 @@ class DeployCommand extends Base{
 				case 'private':
 				case 'tmprivate':
 					$site = 'tmprivate';
-					$output->writeln($this->syncSite($site, $server, $container->getParameter('paths.project') . "/config/sync/tmprivate.exclude"));
+					$output->writeln($this->syncSite($site, $server));
 					$output->writeln($this->setSitePermissions($site, $server, [
 						"setfacl -dR -m u:www-data:rwX -m u:ubuntu:rwX var && setfacl -R -m u:www-data:rwX -m u:ubuntu:rwX var"
 						,"setfacl -dR -m u:www-data:rwX -m u:ubuntu:rwX files && setfacl -R -m u:www-data:rwX -m u:ubuntu:rwX files"
@@ -89,7 +89,7 @@ class DeployCommand extends Base{
 				case 'cheftiffanymiller.com':
 					$site = 'cheftiffanymiller.com';
 					$isComposerChanged = $this->isComposerChanged($site, $server);
-					$output->writeln($this->syncSite($site, $server, $container->getParameter('paths.project') . "/config/sync/ctm.exclude"));
+					$output->writeln($this->syncSite($site, $server));
 					$output->writeln($this->setSitePermissions($site, $server, [
 						//-! special permissions coming from site `bin/ready` script. should be a better way to do this that works for both local and remote and can account for site specific stuff without allowing the site to run arbitrary code as root
 					]));
@@ -101,7 +101,7 @@ class DeployCommand extends Base{
 				case 'dw':
 					$site = 'dw';
 					$isComposerChanged = $this->isComposerChanged($site, $server);
-					$output->writeln($this->syncSite($site, $server, $container->getParameter('paths.project') . "/config/sync/dw.exclude"));
+					$output->writeln($this->syncSite($site, $server));
 					$output->writeln($this->setSitePermissions($site, $server, [
 						'sudo setfacl -R -m u:www-data:rwx tmp',
 						'sudo setfacl -dR -m u:www-data:rwx tmp',
@@ -178,6 +178,26 @@ class DeployCommand extends Base{
 			$paths[] = "/dist/public/_assets/svgs/";
 		}
 		$syncOpts = "-Dilprtz --copy-unsafe-links --delete";
+
+		//--check for default site exclude file locations
+		if(!isset($exclude)){
+			foreach([
+				'/config/srv/deploy.exclude',
+				'/config/srv.exclude',
+				'/srv/deploy.exclude',
+			] as $path){
+				$path = "{$sitesPath}/{$site}{$path}";
+				if(file_exists($path)){
+					$exclude = $path;
+				}
+			}
+		}
+
+		//--if no exclude is set, use default
+		if(!isset($exclude)){
+			$exclude = $this->getContainer()->getParameter('paths.project') . "/config/sync/site.exclude";
+		}
+
 		if($exclude){
 			$syncOpts .= " --exclude-from={$exclude}";
 		}
