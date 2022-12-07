@@ -32,7 +32,7 @@ class BackupCommand extends Base{
 					'db'=> [
 						'dest'=> '/Volumes/Backup/tmcom/db'
 						,'pre'=> "ssh {$user}@{$host} \"sudo -u backup /home/backup/bin/db-backup\""
-						,'src'=> '/var/bu/db'
+						,'src'=> '/var/bu/db/'
 					]
 					,'letsencrypt'=> [
 						'dest'=> '/Volumes/LetsEncrypt'
