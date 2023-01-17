@@ -16,6 +16,15 @@ db:
     name: tif
     password: '{{tifDBPassword}}'
     user: tif
+devVarDirs:
+  -
+    site: tobymackenzie.com
+    dest: var/cache
+    src: cache
+  -
+    site: tobymackenzie.com
+    dest: var/logs
+    src: logs
 httpsCerts:
   ##==personal
   dev.tobymackenzie.com:
@@ -134,6 +143,7 @@ sites:
     webroot: /dw/webroot
 tmKey: 'ssh-rsa !!12345 admin@tobymackenzie.com'
 tmcomEnv: 'prod'
+webUser: 'www-data'
 workKey: 'ssh-rsa !!12345 admin@tobymackenzie.com'
 workUser: wrk
 
