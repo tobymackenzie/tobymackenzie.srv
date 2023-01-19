@@ -10,3 +10,5 @@
         files_matching: '.*\.yml'
 - import_playbook: plays/users.yml
 - import_playbook: plays/build.yml
+- import_playbook: plays/sites-var.yml
+- import_playbook: plays/dev/sites-var.yml

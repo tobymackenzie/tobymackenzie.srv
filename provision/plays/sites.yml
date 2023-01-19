@@ -10,44 +10,6 @@
         path: /var/www/sites
         recurse: false
         state: directory
-- name: set up var folder
-  become: true
-  hosts: all
-  tasks:
-    - name: create var folder
-      file:
-        mode: 'u=rwx,g=rx,o=rx'
-        path: /var/www/var
-        recurse: false
-        state: directory
-    - name: var folder default mask
-      ansible.posix.acl:
-        default: true
-        etype: mask
-        path: /var/www/var
-        permissions: rwx
-        # recalculate_mask: no_mask
-        state: present
-    - name: var folder admin default permissions
-      ansible.posix.acl:
-        default: true
-        entity: '{{adminUser}}'
-        etype: user
-        follow: false
-        path: /var/www/var
-        permissions: rwX
-        recalculate_mask: no_mask
-        state: present
-    - name: var folder web default permissions
-      ansible.posix.acl:
-        default: true
-        entity: '{{webUser}}'
-        etype: user
-        follow: false
-        path: /var/www/var
-        permissions: rwX
-        recalculate_mask: no_mask
-        state: present
 - name: prepare site db
   become: true
   hosts: all

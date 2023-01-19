@@ -4,6 +4,7 @@
 - import_playbook: web.yml
 - import_playbook: db.yml
 - import_playbook: sites.yml
+- import_playbook: sites-var.yml
 - import_playbook: https.yml
 - import_playbook: web-config.yml
 - import_playbook: dbBackup.yml

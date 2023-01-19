@@ -1,0 +1,15 @@
+- name: dev var
+  become: true
+  hosts: all
+  tasks:
+    - name: var folder dir sources
+      file:
+        path: "/var/www/var/{{item.site}}/{{item.src}}"
+        state: directory
+      with_items: "{{devVarDirs}}"
+    - name: var folder dir destinations
+      file:
+        src: "/var/www/var/{{item.site}}/{{item.src}}"
+        path: "/var/www/sites/{{item.site}}/{{item.dest}}"
+        state: link
+      with_items: "{{devVarDirs}}"
