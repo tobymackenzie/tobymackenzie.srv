@@ -2,7 +2,7 @@
 - name: secure server
   become: true
   handlers:
-    - include: ../handlers.yml
+    - import_tasks: ../handlers.yml
   hosts: all
   tasks:
     - name: disallow root ssh

@@ -1,7 +1,7 @@
 - name: install certbot
   become: true
   handlers:
-    - include: ../handlers.yml
+    - import_tasks: ../handlers.yml
   hosts: public
   tasks:
     - name: install certbot cli

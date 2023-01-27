@@ -1,7 +1,7 @@
 - name: configure apache
   become: true
   handlers:
-    - include: ../handlers.yml
+    - import_tasks: ../handlers.yml
   hosts: all
   vars:
     installedHttpsCerts: {}
@@ -203,7 +203,7 @@
 - name: configure php
   become: true
   handlers:
-    - include: ../handlers.yml
+    - import_tasks: ../handlers.yml
   hosts: all
   tasks:
     - name: configure max children

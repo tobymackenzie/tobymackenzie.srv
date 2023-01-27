@@ -1,7 +1,7 @@
 - name: install web
   become: true
   handlers:
-    - include: ../handlers.yml
+    - import_tasks: ../handlers.yml
   hosts: all
   tasks:
     - name: install apache
