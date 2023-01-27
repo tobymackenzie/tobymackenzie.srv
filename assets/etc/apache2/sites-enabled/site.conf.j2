@@ -1,10 +1,16 @@
+{% if item.value.https|default(false) %}
+{%	set httpsCert = item.value.httpsCert|default(item.key) %}
+{% else %}
+{%	set httpsCert = false %}
+{% endif %}
 {#-# 2784 is to support original www port (see <https://worldwideweb.cern.ch/code/>) for main site #}
 <VirtualHost *:80{% if item.value.sort is defined and item.value.sort == 0 %} *:2784{% endif %}>
 	Include inc/{{item.key}}.conf
+{% if httpsCert in installedHttpsCerts %}
+	Header always append Alt-Svc 'h2=":443"'
+{% endif %}
 </VirtualHost>
-{% if item.value.https|default(false) %}
-{%	set httpsCert = item.value.httpsCert|default(item.key) %}
-{%	if httpsCert in installedHttpsCerts %}
+{% if httpsCert in installedHttpsCerts %}
 <IfModule mod_ssl.c>
 	<VirtualHost *:443>
 		Include inc/{{item.key}}.conf
@@ -13,5 +19,4 @@
 		SSLCertificateKeyFile /etc/letsencrypt/live/{{httpsCert}}/privkey.pem
 	</VirtualHost>
 </IfModule>
-{% 	endif %}
 {% endif %}
