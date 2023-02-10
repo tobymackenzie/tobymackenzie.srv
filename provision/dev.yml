@@ -7,10 +7,10 @@
     - name: load vars
       include_vars:
         dir: vars
-        files_matching: '.*\.yml'
+        files_matching: '.*\.yml$'
     - name: load dev vars
       include_vars:
         dir: vars.dev
-        files_matching: '.*\.yml'
+        files_matching: '.*\.yml$'
 - import_playbook: plays/main.yml
 - import_playbook: plays/dev/sites-var.yml
