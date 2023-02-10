@@ -70,6 +70,7 @@ sites:
     name: www.tobymackenzie.com
     aliases:
       - t.www.tobymackenzie.com
+      - deploy.t
     webroot: /tobymackenzie.com/dist/public/
     sort: 0
   dev.tobymackenzie.com:

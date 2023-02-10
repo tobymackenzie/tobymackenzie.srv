@@ -29,9 +29,7 @@ class DeployCommand extends Base{
 		$group = $input->getOption('group');
 		switch($group){
 			case 'dev':
-				throw new Exception("'dev' group cannot currently be deployed with this command.  Deployment is handled automatically via Vagrant, with sites mounted into place.");
-				//-! we need a way to test deployment locally while still supporting dev with local files
-				$server = 'ubuntu@10.9.9.9';
+				$server = 'ubuntu@deploy.t';
 			break;
 			case 'public':
 			case 'prod':

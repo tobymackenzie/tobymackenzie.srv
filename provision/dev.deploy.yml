@@ -1,0 +1,15 @@
+- import_playbook: plays/ansible.yml
+- name: vars
+  gather_facts: no
+  hosts: all
+  no_log: true
+  tasks:
+    - name: load vars
+      include_vars:
+        dir: vars
+        files_matching: '.*\.yml$'
+    - name: load dev vars
+      include_vars:
+        dir: vars.dev
+        files_matching: '.*\.yml$'
+- import_playbook: plays/main.yml
