@@ -7,6 +7,7 @@
 /*.log
 /composer.lock
 /provision/vars/*local.yml
+/provision/vars.dev/*local.yml
 /sites/*
 !/sites/default
 /vendor

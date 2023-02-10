@@ -8,13 +8,9 @@
       include_vars:
         dir: vars
         files_matching: '.*\.yml'
-    - name: set server facts
-      set_fact:
-        dbRootPassword: '!!12345'
-        tmcomDBPassword: '!!12345'
-        dbBackupPassword: '!!12345'
-        dwDBPassword: '!!12345'
-        tifDBPassword: '!!12345'
-        tmcomEnv: dev
+    - name: load dev vars
+      include_vars:
+        dir: vars.dev
+        files_matching: '.*\.yml'
 - import_playbook: plays/main.yml
 - import_playbook: plays/dev/sites-var.yml
