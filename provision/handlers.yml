@@ -1,5 +1,5 @@
 - name: restart apache
-  command: 'apachectl graceful'
+  command: 'apachectl configtest && apachectl restart'
   listen: 'apache conf change'
 - name: restart php
   service:
