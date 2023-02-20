@@ -29,9 +29,6 @@ Vagrant.configure(2) do |config|
 		web.vm.synced_folder './sites/dw', '/var/www/sites/dw', owner: 'ubuntu', group: 'ubuntu'
 		web.vm.synced_folder './sites/tmprivate', '/var/www/sites/tmprivate', owner: 'ubuntu', group: 'ubuntu'
 		web.vm.synced_folder './sites/tobymackenzie.com', '/var/www/sites/tobymackenzie.com', owner: 'ubuntu', group: 'ubuntu'
-		# web.trigger.after :reload, :up do |trigger|
-		# 	trigger.run = {inline: 'bin/console deploy -g dev'}
-		# end
 
 		#--disable syncing project folder
 		web.vm.synced_folder '.', '/vagrant', disabled: true
