@@ -26,6 +26,13 @@
         get_mime: false
         path: /etc/letsencrypt/accounts
       register: certbotAccountsStat
+    - name: set up deploy hook directory
+      file:
+        path: /etc/letsencrypt/renewal-hooks/deploy
+        group: root
+        mode: '0750'
+        owner: root
+        state: directory
     - name: set up deploy hook
       copy:
         dest: /etc/letsencrypt/renewal-hooks/deploy/deploy.sh
