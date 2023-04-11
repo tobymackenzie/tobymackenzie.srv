@@ -39,6 +39,11 @@ class BackupCommand extends Base{
 						'dest'=> '/Volumes/LetsEncrypt'
 						,'src'=> '/etc/letsencrypt/'
 					]
+					//-! should store all sites files in shared location to easily backup
+					,'ctm files'=> [
+						'dest'=> "{$destPath}/tmcom/ctmfiles"
+						,'src'=> '/var/www/sites/cheftiffanymiller.com/www/_content/uploads/'
+					]
 					,'tmcom files'=> [
 						'dest'=> "{$destPath}/tmcom/tmfiles"
 						,'src'=> '/var/www/sites/tobymackenzie.com/app/files/'
