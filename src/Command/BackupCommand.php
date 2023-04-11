@@ -28,9 +28,10 @@ class BackupCommand extends Base{
 				$user = '2b';
 				$date = new DateTime();
 				$date = $date->format('Ymd-His');
+				$destPath = '/Volumes/Backup';
 				foreach([
 					'db'=> [
-						'dest'=> '/Volumes/Backup/tmcom/db'
+						'dest'=> "{$destPath}/tmcom/db"
 						,'pre'=> "ssh {$user}@{$host} \"sudo -u backup /home/backup/bin/db-backup\""
 						,'src'=> '/var/bu/db/'
 					]
@@ -39,14 +40,14 @@ class BackupCommand extends Base{
 						,'src'=> '/etc/letsencrypt/'
 					]
 					,'tmcom files'=> [
-						'dest'=> '/Volumes/Backup/tmcom/tmfiles'
+						'dest'=> "{$destPath}/tmcom/tmfiles"
 						,'src'=> '/var/www/sites/tobymackenzie.com/app/files/'
 					]
 					//-!! should come from config
 					,'wrk'=> [
 						'customOpts'=> '--exclude="/.*"'
-						,'dest'=> '/Volumes/Abu/tmcom/wrk'
 						,'src'=> '/home/wrk/'
+						,'dest'=> "{$destPath}/tmcom/wrk"
 					]
 				] as $name=> $config){
 					if(is_dir($config['dest']) && is_writable($config['dest'])){
