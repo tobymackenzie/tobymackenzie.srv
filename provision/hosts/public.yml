@@ -1,7 +1,7 @@
 all:
   hosts:
     tobymackenzie.com:
-      ansible_user: ubuntu
+      ansible_user: 2b
   vars:
     dbRootPassword: '!!12345'
     tifDBPassword: '!!12345'

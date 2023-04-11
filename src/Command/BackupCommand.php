@@ -25,7 +25,7 @@ class BackupCommand extends Base{
 			case 'public':
 				//-! should come from config
 				$host = 'tobymackenzie.com';
-				$user = 'ubuntu';
+				$user = '2b';
 				$date = new DateTime();
 				$date = $date->format('Ymd-His');
 				foreach([

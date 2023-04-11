@@ -33,7 +33,7 @@ class DeployCommand extends Base{
 			break;
 			case 'public':
 			case 'prod':
-				$server = 'ubuntu@tobymackenzie.com';
+				$server = '2b@tobymackenzie.com';
 			break;
 			default:
 				throw new Exception("Unknown group {$group}");
@@ -51,8 +51,8 @@ class DeployCommand extends Base{
 					$output->writeln($this->syncSite($site, $server));
 					//-! users should come from config
 					$output->writeln($this->setSitePermissions($site, $server, [
-						"setfacl -dR -m u:www-data:rwX -m u:ubuntu:rwX var && setfacl -R -m u:www-data:rwX -m u:ubuntu:rwX var"
-						,"setfacl -dR -m u:www-data:rwX -m u:ubuntu:rwX app/files/wp-uploads && setfacl -R -m u:www-data:rwX -m u:ubuntu:rwX app/files/wp-uploads"
+						"setfacl -dR -m u:www-data:rwX -m u:2b:rwX var && setfacl -R -m u:www-data:rwX -m u:2b:rwX var"
+						,"setfacl -dR -m u:www-data:rwX -m u:2b:rwX app/files/wp-uploads && setfacl -R -m u:www-data:rwX -m u:2b:rwX app/files/wp-uploads"
 					]));
 					if($isComposerChanged){
 						$this->runComposer($site, $server);
@@ -73,8 +73,8 @@ class DeployCommand extends Base{
 					$site = 'tmprivate';
 					$output->writeln($this->syncSite($site, $server));
 					$output->writeln($this->setSitePermissions($site, $server, [
-						"setfacl -dR -m u:www-data:rwX -m u:ubuntu:rwX var && setfacl -R -m u:www-data:rwX -m u:ubuntu:rwX var"
-						,"setfacl -dR -m u:www-data:rwX -m u:ubuntu:rwX files && setfacl -R -m u:www-data:rwX -m u:ubuntu:rwX files"
+						"setfacl -dR -m u:www-data:rwX -m u:2b:rwX var && setfacl -R -m u:www-data:rwX -m u:2b:rwX var"
+						,"setfacl -dR -m u:www-data:rwX -m u:2b:rwX files && setfacl -R -m u:www-data:rwX -m u:2b:rwX files"
 					]));
 				break;
 				case '10kgol':
@@ -210,7 +210,7 @@ class DeployCommand extends Base{
 	protected function setSitePermissions($site, $server, $additional = null){
 		$sitesPath = $this->getContainer()->getParameter('paths.sites');
 		//-! user / group should come from config
-		$command = "sudo chown -R ubuntu:ubuntu .";
+		$command = "sudo chown -R 2b:2b .";
 		$command .= " && sudo find . -type f -exec chmod go-wx {} \+";
 		$command .= " && sudo find . -type d -exec chmod go-w {} \+";
 		if($additional){

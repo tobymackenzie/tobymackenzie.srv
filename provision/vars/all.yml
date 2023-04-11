@@ -1,4 +1,4 @@
-adminUser: ubuntu
+adminUser: 2b
 backupRootPath: '/var/bu'
 backupUser: 'backup'
 db:
