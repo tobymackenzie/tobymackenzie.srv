@@ -44,6 +44,18 @@ if($dbResults){
 						unset($unhandledTablePaths[$removeKey]);
 					}
 					makeDir($tablePath);
+
+					//--save schema
+					$schemaPath = $tablePath . '/table.sql';
+					$createResults = $dbConn->query("show create table `{$table}`");
+					if($createResults){
+							$content = $createResults->fetch(PDO::FETCH_NUM)[1];
+							if(!(file_exists($schemaPath) && $content === file_get_contents($schemaPath))){
+									output("writing {$table} schema");
+									file_put_contents($schemaPath, $content);
+							}
+					}
+
 					//--get keys
 					$keys = [];
 					$keysResults = $dbConn->query("show keys from `{$table}` where Key_name = 'PRIMARY'");
