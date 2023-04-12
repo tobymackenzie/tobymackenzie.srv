@@ -15,7 +15,7 @@ Vagrant.configure(2) do |config|
 		end
 
 		#==provision
-		db.vm.provision 'shell', path: 'provision/init.sh', privileged: true
+		web.vm.provision 'shell', path: 'provision/init.sh', privileged: true
 		#-@ [official](http://docs.ansible.com/ansible/guide_vagrant.html)
 		web.vm.provision 'ansible' do |ansible|
 			ansible.verbose = 'v'
@@ -47,7 +47,7 @@ Vagrant.configure(2) do |config|
 		end
 
 		#==provision
-		db.vm.provision 'shell', path: 'provision/init.sh', privileged: true
+		build.vm.provision 'shell', path: 'provision/init.sh', privileged: true
 		#-@ [official](http://docs.ansible.com/ansible/guide_vagrant.html)
 		build.vm.provision 'ansible' do |ansible|
 			ansible.verbose = 'v'
@@ -80,7 +80,7 @@ Vagrant.configure(2) do |config|
 		end
 
 		#==provision
-		db.vm.provision 'shell', path: 'provision/init.sh', privileged: true
+		deploy.vm.provision 'shell', path: 'provision/init.sh', privileged: true
 		#-@ [official](http://docs.ansible.com/ansible/guide_vagrant.html)
 		deploy.vm.provision 'ansible' do |ansible|
 			ansible.verbose = 'v'
