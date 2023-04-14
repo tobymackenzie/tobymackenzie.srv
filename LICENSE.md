@@ -1,12 +1,14 @@
-Copyright (c) 2014, Toby Mackenzie
-All rights reserved.
+SPDX-License-Identifier: 0BSD OR Unlicense OR CC0-1.0
+Copyright 2017 by Toby Mackenzie
+No rights reserved
 
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+This work, its contents, and any portion thereof, is free and open source, dedicated to the public benefit, and freely licensed to use, copy, modify, and distribute in any way, for any purpose, by anyone.
 
-* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+This work is designed for the authors' purposes, and is provided to others AS-IS, with NO WARRANTY OF ANY KIND.  NO AUTHORS SHALL BE HELD LIABLE FOR ANY REASON arising from, out of, or in connection with the work or its use, to the maximum extent allowable by law.
 
-* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+For maximum freedom to use this work, it is quadruple-licensed and may be used under the above license OR any one of the following standard licenses, as if their text replaced the text of this file:
 
-* Neither the name of this software nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+- [BSD Zero Clause License](https://spdx.org/licenses/0BSD.html)
+- [Unlicense](https://spdx.org/licenses/Unlicense.html)
+- [Creative Commons Zero v1.0 Universal License](https://spdx.org/licenses/CC0-1.0.html)
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
