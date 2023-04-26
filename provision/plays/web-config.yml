@@ -178,6 +178,7 @@
         apacheVhostUsedFiles: '{{_apacheConfVhostsResult.results|selectattr("invocation", "defined")|map(attribute="invocation.module_args.dest")|list}}'
     - name: get list of all vhost conf files
       find:
+        file_type: any
         paths: /etc/apache2/sites-enabled/
         patterns: '*.conf'
       register: allApacheVhostFiles
