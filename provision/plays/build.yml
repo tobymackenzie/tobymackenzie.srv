@@ -7,6 +7,7 @@
         name:
           - php
           - php-cli
+          - php-gd
           - phpunit
         state: present
     - name: install css build packages
