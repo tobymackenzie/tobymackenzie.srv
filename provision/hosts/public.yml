@@ -4,7 +4,6 @@ all:
       ansible_user: 2b
   vars:
     dbRootPassword: '!!12345'
-    tifDBPassword: '!!12345'
     tmcomDBPassword: '!!12345'
     dbBackupPassword: '!!12345'
     dwDBPassword: '!!12345'

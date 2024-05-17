@@ -83,19 +83,6 @@ class DeployCommand extends Base{
 					$output->writeln($this->setSitePermissions($site, $server));
 				break;
 				//==clients
-				case 'ctm':
-				case 'cheftiffanymiller.com':
-					$site = 'cheftiffanymiller.com';
-					$isComposerChanged = $this->isComposerChanged($site, $server);
-					$output->writeln($this->syncSite($site, $server));
-					$output->writeln($this->setSitePermissions($site, $server, [
-						//-! special permissions coming from site `bin/ready` script. should be a better way to do this that works for both local and remote and can account for site specific stuff without allowing the site to run arbitrary code as root
-					]));
-					if($isComposerChanged){
-						$this->runComposer($site, $server);
-					}
-					$this->runForSite($site, $server, 'bin/ready');
-				break;
 				case 'dw':
 					$site = 'dw';
 					$isComposerChanged = $this->isComposerChanged($site, $server);

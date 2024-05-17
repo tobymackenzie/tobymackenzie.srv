@@ -25,7 +25,6 @@ Vagrant.configure(2) do |config|
 		#==sync local folders
 		#--sync sites folders
 		web.vm.synced_folder './sites/10k-gol.site', '/var/www/sites/10k-gol.site', owner: '2b', group: '2b'
-		web.vm.synced_folder './sites/cheftiffanymiller.com', '/var/www/sites/cheftiffanymiller.com', owner: '2b', group: '2b'
 		web.vm.synced_folder './sites/dev.tobymackenzie.com', '/var/www/sites/dev.tobymackenzie.com', owner: '2b', group: '2b'
 		web.vm.synced_folder './sites/dw', '/var/www/sites/dw', owner: '2b', group: '2b'
 		web.vm.synced_folder './sites/tmprivate', '/var/www/sites/tmprivate', owner: '2b', group: '2b'
@@ -57,7 +56,6 @@ Vagrant.configure(2) do |config|
 		#==sync local folders
 		#--sync sites folders
 		build.vm.synced_folder './sites/10k-gol.site', '/var/www/sites/10k-gol.site', owner: '2b', group: '2b'
-		build.vm.synced_folder './sites/cheftiffanymiller.com', '/var/www/sites/cheftiffanymiller.com', owner: '2b', group: '2b'
 		build.vm.synced_folder './sites/dev.tobymackenzie.com', '/var/www/sites/dev.tobymackenzie.com', owner: '2b', group: '2b'
 		build.vm.synced_folder './sites/dw', '/var/www/sites/dw', owner: '2b', group: '2b'
 		build.vm.synced_folder './sites/tmprivate', '/var/www/sites/tmprivate', owner: '2b', group: '2b'

@@ -45,9 +45,6 @@ class UpdateCommand extends Base{
 					$site = '10k-gol.site';
 				break;
 				//==clients
-				case 'ctm':
-					$site = 'cheftiffanymiller.com';
-				break;
 			}
 			$sitePath = $sitesPath . '/' . $site;
 			if(file_exists($sitePath . '/composer.json')){

@@ -12,10 +12,6 @@ db:
     name: dw
     password: '{{dwDBPassword}}'
     user: dw
-  tif:
-    name: tif
-    password: '{{tifDBPassword}}'
-    user: tif
 devVarDirs:
   -
     site: tobymackenzie.com
@@ -48,9 +44,6 @@ httpsCerts:
     domains:
       - '{{tmprivateDomain|default("private.macn.me")}}'
   ##==client
-  cheftiffanymiller.com:
-    domains:
-      - cheftiffanymiller.com
 dbBackupPath: '{{backupRootPath}}/db'
 dbBackupUser: 'backup'
 fw_allow:
@@ -129,15 +122,6 @@ sites:
     name: 10kgol.macn.me
     webroot: /10k-gol.site
   ##==client
-  cheftiffanymiller.com:
-    accessLog: cheftiffanymiller.com
-    aliases:
-      - '*.cheftiffanymiller.com'
-      - ctm.macn.me
-    https: true
-    httpsCert: cheftiffanymiller.com
-    sort: 1
-    webroot: /cheftiffanymiller.com/www
   dw.macn.me:
     accessLog: dw.site
     sort: 1
