@@ -1,2 +1,6 @@
 tmcomEnv: dev
+devSites:
+  tmdev.t:
+    accessLog: tmdev
+    webroot: /tobymackenzie.com/dist/dev
 

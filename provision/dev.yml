@@ -12,5 +12,9 @@
       include_vars:
         dir: vars.dev
         files_matching: '.*\.yml$'
+    - name: inject dev vars to existing
+      no_log: false
+      set_fact:
+        sites: "{{ sites | combine(devSites) }}"
 - import_playbook: plays/main.yml
 - import_playbook: plays/dev/sites-var.yml
