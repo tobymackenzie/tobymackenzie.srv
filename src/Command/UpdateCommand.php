@@ -49,7 +49,7 @@ class UpdateCommand extends Base{
 			$sitePath = $sitesPath . '/' . $site;
 			if(file_exists($sitePath . '/composer.json')){
 				$interactive = $input->isInteractive(); //-! should be an option from input
-				$command = "sudo fallocate -l 2G /tmp/_swapfile && sudo chmod 600 /tmp/_swapfile && sudo mkswap /tmp/_swapfile && sudo swapon /tmp/_swapfile && php -d memory_limit=-1 `which composer` update && sudo swapoff /tmp/_swapfile && sudo rm -f /tmp/_swapfile";
+				$command = "sudo fallocate -l 2G /tmp/_swapfile && sudo chmod 600 /tmp/_swapfile && sudo mkswap /tmp/_swapfile && sudo swapon /tmp/_swapfile && php -d memory_limit=-1 `which composer` update; sudo swapoff /tmp/_swapfile && sudo rm -f /tmp/_swapfile";
 				if(!$interactive){
 					$command = "export COMPOSER_DISCARD_CHANGES='stash'";
 				}
