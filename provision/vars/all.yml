@@ -41,9 +41,8 @@ httpsCerts:
       - macn.me
       - www.macn.me
   tmprivate:
-    domains:
-      - '{{tmprivateDomain|default("private.macn.me")}}'
-  ##==client
+    domains: '{{tmprivateDomains|default(["private.macn.me"])}}'
+  # ##==client
 dbBackupPath: '{{backupRootPath}}/db'
 dbBackupUser: 'backup'
 fw_allow:
@@ -107,6 +106,7 @@ sites:
   ##--private
   tmprivate:
     accessLog: tmprivate
+    aliases: '{{tmprivateDomains|default(["private.macn.me"])}}'
     https: true
     httpsCert: tmprivate
     name: '{{tmprivateDomain|default("private.macn.me")}}'
