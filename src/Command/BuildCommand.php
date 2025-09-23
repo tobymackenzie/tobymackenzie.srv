@@ -29,6 +29,8 @@ class BuildCommand extends Base{
 			->setAliases($aliases)
 			->addArgument('site', InputArgument::IS_ARRAY, 'Site to build.  Matches name of site in sites folder, or an alias.')
 			->addOption('tasks', 't', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED, 'Build tasks to run.')
+			->addOption('dist', 'd', InputOption::VALUE_REQUIRED, 'Which dist folder to build to.  May also change some characteristics of how build is done')
+			->addOption('force', 'f', InputOption::VALUE_NONE, 'Force task to ignore checks for if rebuild needed.')
 		;
 	}
 
@@ -74,6 +76,12 @@ class BuildCommand extends Base{
 				if($task){
 					$command .= ' -t ' . $task;
 				}
+			}
+			if($input->getOption('dist')){
+				$command .= ' -d ' . $input->getOption('dist');
+			}
+			if($input->getOption('force')){
+				$command .= ' -f';
 			}
 			$this->shellRunner->run([
 				'command'=> $command,
