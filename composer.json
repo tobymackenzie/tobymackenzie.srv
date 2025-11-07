@@ -5,7 +5,7 @@
 		}
 	}
 	,"require": {
-		"php": ">=7.0.0"
+		"php": ">=8.0.0"
 		,"symfony/yaml": "^3.3"
 		,"tjm/shell-runner": "@dev"
 		,"tjm/sy-console": "^1.0"
