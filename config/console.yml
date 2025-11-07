@@ -14,7 +14,6 @@ services:
     resource: '%paths.project%/src/Command'
     tags: ['console.command']
   TJM\TMCom\Dev: ~
-    arguments: ['%paths.project%']
 
 tjm_console:
   name: 'server-tobymackenzie.com'
