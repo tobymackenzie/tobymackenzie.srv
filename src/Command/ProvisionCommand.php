@@ -1,14 +1,19 @@
 <?php
 namespace TJM\TMCom\Command;
 use Exception;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use TJM\Component\Console\Command\ContainerAwareCommand as Base;
 
-class ProvisionCommand extends Base{
+class ProvisionCommand extends Command{
 	static public $defaultName = 'provision';
+	protected string $projectPath;
+	public function __construct(string $projectPath){
+		$this->projectPath = $projectPath;
+		parent::__construct();
+	}
 	protected function configure(){
 		$this
 			->setDescription('Provision server group.')
@@ -20,9 +25,7 @@ class ProvisionCommand extends Base{
 		;
 	}
 	protected function execute(InputInterface $input, OutputInterface $output){
-		$container = $this->getContainer();
-		$projectPath = $container->getParameter('paths.project');
-		chdir($projectPath);
+		chdir($this->projectPath);
 		$group = $input->getArgument('group');
 		switch($group){
 			case 'dev':
@@ -30,11 +33,11 @@ class ProvisionCommand extends Base{
 			break;
 			case 'public':
 				if($input->getOption('book')){
-					$book = $projectPath . "/provision/plays/{$input->getOption('book')}.yml";
+					$book = $this->projectPath . "/provision/plays/{$input->getOption('book')}.yml";
 				}else{
-					$book = $projectPath . "/provision/{$group}.yml";
+					$book = $this->projectPath . "/provision/{$group}.yml";
 				}
-				$inventoryFile = $projectPath . "/provision/hosts/{$group}.yml";
+				$inventoryFile = $this->projectPath . "/provision/hosts/{$group}.yml";
 				$command = "ansible-playbook --diff -i {$inventoryFile}";
 				if($input->getOption('dry-run')){
 					$command .= ' --check';

@@ -1,16 +1,19 @@
 <?php
 namespace TJM\TMCom\Command;
 use Exception;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use TJM\Component\Console\Command\ContainerAwareCommand as Base;
 // use TJM\TMCom\Service\Sites;
 use TJM\ShellRunner\ShellRunner;
 
-class DeployCommand extends Base{
+class DeployCommand extends Command{
 	static public $defaultName = 'deploy';
+	protected string $projectPath;
+	protected $shellRunner;
+	protected string $sitesPath;
 	protected function configure(){
 		$this
 			->setDescription('Deploy one or all sites.')
@@ -19,13 +22,17 @@ class DeployCommand extends Base{
 		;
 	}
 
-	protected $shellRunner;
-	public function __construct(ShellRunner $shellRunner){
+	public function __construct(
+		string $projectPath,
+		ShellRunner $shellRunner,
+		string $sitesPath
+	){
+		$this->projectPath = $projectPath;
 		$this->shellRunner = $shellRunner;
+		$this->sitesPath = $sitesPath;
 		parent::__construct();
 	}
 	protected function execute(InputInterface $input, OutputInterface $output){
-		$container = $this->getContainer();
 		$group = $input->getOption('group');
 		switch($group){
 			case 'dev':
@@ -79,7 +86,7 @@ class DeployCommand extends Base{
 				break;
 				case '10kgol':
 					$site = '10k-gol.site';
-					$output->writeln($this->syncSite($site, $server, $container->getParameter('paths.project') . "/config/sync/10kgol.exclude"));
+					$output->writeln($this->syncSite($site, $server, $this->projectPath . "/config/sync/10kgol.exclude"));
 					$output->writeln($this->setSitePermissions($site, $server));
 				break;
 				//==clients
@@ -118,7 +125,6 @@ class DeployCommand extends Base{
 		]);
 	}
 	protected function runComposer($site, $server, $subcommand = 'install'){
-		$sitesPath = $this->getContainer()->getParameter('paths.sites');
 		$interactive = true; //-! should be an option from input
 		if($server === 'ubuntu@10.9.9.9'){
 			$env = 'dev';
@@ -146,10 +152,9 @@ class DeployCommand extends Base{
 		]);
 	}
 	protected function isComposerChanged($site, $server){
-		$sitesPath = $this->getContainer()->getParameter('paths.sites');
 		try{
 			$syncTest = $this->shellRunner->run([
-				'command'=> "rsync -aiz --dry-run {$sitesPath}/{$site}/composer.lock {$server}:/var/www/sites/{$site}/composer.lock"
+				'command'=> "rsync -aiz --dry-run {$this->sitesPath}/{$site}/composer.lock {$server}:/var/www/sites/{$site}/composer.lock"
 			]);
 		}catch(Exception $e){
 			return true;
@@ -157,7 +162,6 @@ class DeployCommand extends Base{
 		return (bool) preg_match('/[<>].* composer\.lock/', $syncTest);
 	}
 	protected function syncSite($site, $server, $exclude = null){
-		$sitesPath = $this->getContainer()->getParameter('paths.sites');
 		$paths = ["/"];
 		if($site === 'tobymackenzie.com'){
 			$paths[] = "/dist/public/_assets/svgs/";
@@ -171,7 +175,7 @@ class DeployCommand extends Base{
 				'/config/srv.exclude',
 				'/srv/deploy.exclude',
 			] as $path){
-				$path = "{$sitesPath}/{$site}{$path}";
+				$path = "{$this->sitesPath}/{$site}{$path}";
 				if(file_exists($path)){
 					$exclude = $path;
 				}
@@ -180,7 +184,7 @@ class DeployCommand extends Base{
 
 		//--if no exclude is set, use default
 		if(!isset($exclude)){
-			$exclude = $this->getContainer()->getParameter('paths.project') . "/config/sync/site.exclude";
+			$exclude = $this->projectPath . "/config/sync/site.exclude";
 		}
 
 		if($exclude){
@@ -189,13 +193,12 @@ class DeployCommand extends Base{
 		$result = [];
 		foreach($paths as $path){
 			$result[] = $this->shellRunner->run([
-				'command'=> "rsync {$syncOpts} {$sitesPath}/{$site}{$path} {$server}:/var/www/sites/{$site}{$path}"
+				'command'=> "rsync {$syncOpts} {$this->sitesPath}/{$site}{$path} {$server}:/var/www/sites/{$site}{$path}"
 			]);
 		}
 		return implode("\n", $result);
 	}
 	protected function setSitePermissions($site, $server, $additional = null){
-		$sitesPath = $this->getContainer()->getParameter('paths.sites');
 		//-! user / group should come from config
 		$command = "sudo chown -R 2b:2b .";
 		$command .= " && sudo find . -type f -exec chmod go-wx {} \+";

@@ -8,6 +8,7 @@ services:
     autowire: true
     bind:
       $projectPath: '%paths.project%'
+      $sitesPath: '%paths.sites%'
   TJM\ShellRunner\ShellRunner: ~
   TJM\TMCom\Command\:
     resource: '%paths.project%/src/Command'

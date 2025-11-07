@@ -1,15 +1,17 @@
 <?php
 namespace TJM\TMCom\Command;
 use Exception;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use TJM\Component\Console\Command\ContainerAwareCommand as Base;
 use TJM\ShellRunner\ShellRunner;
 
-class UpdateCommand extends Base{
+class UpdateCommand extends Command{
 	static public $defaultName = 'update';
+	protected $shellRunner;
+	protected string $sitesPath;
 	protected function configure(){
 		$this
 			->setDescription('Update site(s) dependencies (local, must deploy to update prod).')
@@ -17,14 +19,15 @@ class UpdateCommand extends Base{
 		;
 	}
 
-	protected $shellRunner;
-	public function __construct(ShellRunner $shellRunner){
+	public function __construct(
+		ShellRunner $shellRunner,
+		string $sitesPath
+	){
 		$this->shellRunner = $shellRunner;
+		$this->sitesPath = $sitesPath;
 		parent::__construct();
 	}
 	protected function execute(InputInterface $input, OutputInterface $output){
-		$container = $this->getContainer();
-		$sitesPath = $this->getContainer()->getParameter('paths.sites');
 		foreach($input->getArgument('site') as $site){
 			switch($site){
 				//==personal
@@ -46,7 +49,7 @@ class UpdateCommand extends Base{
 				break;
 				//==clients
 			}
-			$sitePath = $sitesPath . '/' . $site;
+			$sitePath = $this->sitesPath . '/' . $site;
 			if(file_exists($sitePath . '/composer.json')){
 				$interactive = $input->isInteractive(); //-! should be an option from input
 				$command = "sudo fallocate -l 2G /tmp/_swapfile && sudo chmod 600 /tmp/_swapfile && sudo mkswap /tmp/_swapfile && sudo swapon /tmp/_swapfile && php -d memory_limit=-1 `which composer` update; sudo swapoff /tmp/_swapfile && sudo rm -f /tmp/_swapfile";

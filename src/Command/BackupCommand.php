@@ -2,14 +2,19 @@
 namespace TJM\TMCom\Command;
 use DateTime;
 use Exception;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use TJM\Component\Console\Command\ContainerAwareCommand as Base;
 
-class BackupCommand extends Base{
+class BackupCommand extends Command{
 	static public $defaultName = 'backup';
+	protected string $projectPath;
+	public function __construct(string $projectPath){
+		$this->projectPath = $projectPath;
+		parent::__construct();
+	}
 	protected function configure(){
 		$this
 			->setDescription('Back up server group.')
@@ -17,9 +22,7 @@ class BackupCommand extends Base{
 		;
 	}
 	protected function execute(InputInterface $input, OutputInterface $output){
-		$container = $this->getContainer();
-		$projectPath = $container->getParameter('paths.project');
-		chdir($projectPath);
+		chdir($this->projectPath);
 		$group = $input->getArgument('group');
 		switch($group){
 			case 'public':
