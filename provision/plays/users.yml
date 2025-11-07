@@ -17,6 +17,7 @@
       user:
         append: yes
         groups:
+          - adm #--allow reading log files without sudo (no write)
           - staff #--allow installing to /usr/local/bin
           - sudo #--allow sudo
         name: '{{adminUser}}'
