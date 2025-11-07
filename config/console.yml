@@ -6,10 +6,14 @@ services:
   _defaults:
     autoconfigure: true
     autowire: true
+    bind:
+      $projectPath: '%paths.project%'
   TJM\ShellRunner\ShellRunner: ~
   TJM\TMCom\Command\:
     resource: '%paths.project%/src/Command'
     tags: ['console.command']
+  TJM\TMCom\Dev: ~
+    arguments: ['%paths.project%']
 
 tjm_console:
   name: 'server-tobymackenzie.com'
