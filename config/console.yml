@@ -3,9 +3,11 @@ imports:
 parameters:
   paths.sites: '%paths.project%/sites'
 services:
+  _defaults:
+    autoconfigure: true
+    autowire: true
   TJM\ShellRunner\ShellRunner: ~
   TJM\TMCom\Command\:
-    autowire: true
     resource: '%paths.project%/src/Command'
     tags: ['console.command']
 
