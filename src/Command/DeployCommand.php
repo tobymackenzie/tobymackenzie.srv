@@ -112,6 +112,7 @@ class DeployCommand extends Command{
 				break;
 			}
 		}
+		return 0;
 	}
 
 	//==deployment

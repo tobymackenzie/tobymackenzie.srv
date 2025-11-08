@@ -64,6 +64,7 @@ class UpdateCommand extends Command{
 				]);
 			}
 		}
+		return 0;
 	}
 
 	//==deployment

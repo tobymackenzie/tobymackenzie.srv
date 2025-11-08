@@ -6,9 +6,8 @@
 	}
 	,"require": {
 		"php": ">=8.0.0"
-		,"symfony/yaml": "^3.3"
+		,"symfony/yaml": "^6.4"
 		,"tjm/shell-runner": "@dev"
-		,"tjm/sy-console": "^1.0"
-		,"tjm/sy-dependency-injection": "@dev"
+		,"tjm/sy-console": "^3.0"
 	}
 }

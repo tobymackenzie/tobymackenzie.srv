@@ -58,5 +58,6 @@ class ProvisionCommand extends Command{
 				throw new Exception("Provisioning group '{$group}' not implemented.");
 			break;
 		}
+		return 0;
 	}
 }
