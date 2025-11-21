@@ -1,11 +1,14 @@
 .DS_Store
 .git
+/*.lock
 /.git/
 /.gitignore
 /.well-known/
 /bin/
-/composer.*
-/postcss.json
+/composer.json
+/node_modules
+/package.json
+/postcss.config.js
 /README.md
 /src/run/cli.php
 /src/scripts/

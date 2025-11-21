@@ -68,17 +68,21 @@ class BuildCommand extends Base{
 			}else{
 				array_unshift($tasks, $command[1]);
 			}
-			$command = "bin/console build";
-			foreach($tasks as $task){
-				if($task){
-					$command .= ' -t ' . $task;
+			if($site === '10k-gol.site'){
+				$command = 'bin/build ' . implode(' ', $tasks);
+			}else{
+				$command = "bin/console build";
+				foreach($tasks as $task){
+					if($task){
+						$command .= ' -t ' . $task;
+					}
 				}
-			}
-			if($input->getOption('dist')){
-				$command .= ' -d ' . $input->getOption('dist');
-			}
-			if($input->getOption('force')){
-				$command .= ' -f';
+				if($input->getOption('dist')){
+					$command .= ' -d ' . $input->getOption('dist');
+				}
+				if($input->getOption('force')){
+					$command .= ' -f';
+				}
 			}
 			$this->shellRunner->run([
 				'command'=> $command,

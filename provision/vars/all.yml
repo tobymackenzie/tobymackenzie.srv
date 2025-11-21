@@ -120,7 +120,7 @@ sites:
     https: true
     httpsCert: dev.tobymackenzie.com
     name: 10kgol.macn.me
-    webroot: /10k-gol.site
+    webroot: /10k-gol.site/dist
   ##==client
   dw.macn.me:
     accessLog: dw.site

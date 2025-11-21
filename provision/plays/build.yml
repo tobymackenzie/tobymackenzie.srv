@@ -19,6 +19,7 @@
     - name: install js build packages
       apt:
         name:
+          - npm
           - rollup
           - uglifyjs
           - yarnpkg
