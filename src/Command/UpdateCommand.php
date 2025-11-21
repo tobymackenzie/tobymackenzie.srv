@@ -11,8 +11,8 @@ use TJM\TMCom\Service\Sites;
 
 class UpdateCommand extends Command{
 	static public $defaultName = 'update';
-	protected $shellRunner;
-	protected $sites;
+	protected ShellRunner $shellRunner;
+	protected Sites $sites;
 	protected string $sitesPath;
 	protected function configure(){
 		$this

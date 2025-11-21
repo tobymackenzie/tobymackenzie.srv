@@ -12,8 +12,8 @@ use TJM\ShellRunner\ShellRunner;
 class DeployCommand extends Command{
 	static public $defaultName = 'deploy';
 	protected string $projectPath;
-	protected $sites;
-	protected $shellRunner;
+	protected ShellRunner $shellRunner;
+	protected Sites $sites;
 	protected string $sitesPath;
 	protected function configure(){
 		$this

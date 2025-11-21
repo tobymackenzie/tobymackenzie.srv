@@ -9,19 +9,19 @@ class Dev{
 	/*=====
 	==server
 	=====*/
-	public function controlSrv($server, $do){
+	public function controlSrv(array|string $server, string $do){
 		if(is_array($server)){
 			$server = implode(' ', $server);
 		}
 		passthru('cd ' . escapeshellarg($this->path) . ' && vagrant ' . $do . ' ' . $server);
 	}
-	public function srvStatus($server){
+	public function srvStatus(array|string $server){
 		$this->controlSrv($server, 'status');
 	}
-	public function startSrv($server){
+	public function startSrv(array|string $server){
 		$this->controlSrv($server, 'up');
 	}
-	public function stopSrv($server){
+	public function stopSrv(array|string $server){
 		$this->controlSrv($server, 'halt');
 	}
 }

@@ -24,8 +24,8 @@ use TJM\TMCom\Service\Sites;
 	description: 'Run local build command / tasks.',
 )]
 class BuildCommand extends Base{
-	protected $shellRunner;
-	protected $sites;
+	protected ShellRunner $shellRunner;
+	protected Sites $sites;
 	protected function configure(){
 		$this
 			->addArgument('site', InputArgument::IS_ARRAY, 'Site to build.  Matches name of site in sites folder, or an alias.')
