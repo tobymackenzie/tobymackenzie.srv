@@ -23,4 +23,7 @@ class Sites{
 			return $this->sitesPath;
 		}
 	}
+	public function hasComposer(string $site){
+		return file_exists($this->getPath($site) . '/composer.json');
+	}
 }
