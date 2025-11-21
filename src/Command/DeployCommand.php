@@ -7,8 +7,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use TJM\TMCom\Service\Sites;
 use TJM\ShellRunner\ShellRunner;
+use TJM\TMCom\Sites;
 
 #[AsCommand(
 	name: 'deploy',

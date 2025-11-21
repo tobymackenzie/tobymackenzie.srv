@@ -1,5 +1,5 @@
 <?php
-namespace TJM\TMCom\Service;
+namespace TJM\TMCom;
 class Sites{
 	protected array $aliases = [];
 	protected string $sitesPath = __DIR__ . '/../../sites';

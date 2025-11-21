@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use TJM\Component\Console\Command\ContainerAwareCommand as Base;
 use TJM\ShellRunner\ShellRunner;
-use TJM\TMCom\Service\Sites;
+use TJM\TMCom\Sites;
 
 #[AsCommand(
 	name: 'build',
