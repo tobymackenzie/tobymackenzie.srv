@@ -86,7 +86,7 @@ class DeployCommand extends Command{
 				break;
 				case '10kgol':
 					$site = '10k-gol.site';
-					$output->writeln($this->syncSite($site, $server, $this->projectPath . "/config/sync/10kgol.exclude"));
+					$output->writeln($this->syncSite($site, $server));
 					$output->writeln($this->setSitePermissions($site, $server));
 				break;
 				//==clients
