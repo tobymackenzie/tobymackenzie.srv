@@ -7,10 +7,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use TJM\ShellRunner\ShellRunner;
+use TJM\TMCom\Service\Sites;
 
 class UpdateCommand extends Command{
 	static public $defaultName = 'update';
 	protected $shellRunner;
+	protected $sites;
 	protected string $sitesPath;
 	protected function configure(){
 		$this
@@ -21,35 +23,16 @@ class UpdateCommand extends Command{
 
 	public function __construct(
 		ShellRunner $shellRunner,
-		string $sitesPath
+		Sites $sites
 	){
 		$this->shellRunner = $shellRunner;
-		$this->sitesPath = $sitesPath;
+		$this->sites = $sites;
 		parent::__construct();
 	}
 	protected function execute(InputInterface $input, OutputInterface $output){
 		foreach($input->getArgument('site') as $site){
-			switch($site){
-				//==personal
-				case 'tm':
-				case 'tmcom':
-				case 'tmweb':
-					$site = 'tobymackenzie.com';
-				break;
-				case 'dev':
-					$site = 'dev.tobymackenzie.com';
-				break;
-				//==personal - etc
-				case 'priv':
-				case 'private':
-					$site = 'tmprivate';
-				break;
-				case '10kgol':
-					$site = '10k-gol.site';
-				break;
-				//==clients
-			}
-			$sitePath = $this->sitesPath . '/' . $site;
+			$site = $this->sites->getKey($site);
+			$sitePath = $this->sites->getPath($site);
 			if(file_exists($sitePath . '/composer.json')){
 				$interactive = $input->isInteractive(); //-! should be an option from input
 				$command = "sudo fallocate -l 2G /tmp/_swapfile && sudo chmod 600 /tmp/_swapfile && sudo mkswap /tmp/_swapfile && sudo swapon /tmp/_swapfile && php -d memory_limit=-1 `which composer` update; sudo swapoff /tmp/_swapfile && sudo rm -f /tmp/_swapfile";

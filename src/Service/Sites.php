@@ -15,7 +15,12 @@ class Sites{
 		}
 		return $site;
 	}
-	public function getPath(){
-		return $this->sitesPath;
+	public function getPath($site = null){
+		if(!empty($site)){
+			$site = $this->getKey($site);
+			return $this->sitesPath . '/' . $site;
+		}else{
+			return $this->sitesPath;
+		}
 	}
 }

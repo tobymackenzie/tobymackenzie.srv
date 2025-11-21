@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use TJM\Component\Console\Command\ContainerAwareCommand as Base;
 use TJM\ShellRunner\ShellRunner;
+use TJM\TMCom\Service\Sites;
 
 #[AsCommand(
 	name: 'build',
@@ -24,6 +25,7 @@ use TJM\ShellRunner\ShellRunner;
 )]
 class BuildCommand extends Base{
 	protected $shellRunner;
+	protected $sites;
 	protected function configure(){
 		$this
 			->addArgument('site', InputArgument::IS_ARRAY, 'Site to build.  Matches name of site in sites folder, or an alias.')
@@ -32,33 +34,18 @@ class BuildCommand extends Base{
 			->addOption('force', 'f', InputOption::VALUE_NONE, 'Force task to ignore checks for if rebuild needed.')
 		;
 	}
-	public function __construct(ShellRunner $shellRunner){
+	public function __construct(
+		ShellRunner $shellRunner,
+		Sites $sites
+	){
 		$this->shellRunner = $shellRunner;
+		$this->sites = $sites;
 		parent::__construct();
 	}
 	protected function execute(InputInterface $input, OutputInterface $output){
 		$container = $this->getContainer();
 		foreach($input->getArgument('site') as $site){
-			switch($site){
-				//==personal
-				case 'tm':
-				case 'tmcom':
-				case 'tmweb':
-					$site = 'tobymackenzie.com';
-				break;
-				case 'dev':
-					$site = 'dev.tobymackenzie.com';
-				break;
-				//==personal - etc
-				case 'priv':
-				case 'private':
-					$site = 'tmprivate';
-				break;
-				case '10kgol':
-					$site = '10k-gol.site';
-				break;
-				//==clients
-			}
+			$site = $this->sites->getKey($site);
 			$command = explode(':', $input->getArgument('command'));
 			$tasks = $input->getOption('tasks');
 			if(count($command) === 1){
