@@ -14,6 +14,17 @@ services:
     resource: '%paths.project%/src/Command'
     tags: ['console.command']
   TJM\TMCom\Dev: ~
+  TJM\TMCom\Service\Sites:
+    arguments:
+      - '%paths.sites%'
+      -
+        10kgol: 10k-gol.site
+        dev: dev.tobymackenzie.com
+        tm: tobymackenzie.com
+        priv: tmprivate
+        private: tmprivate
+        tmcom: tobymackenzie.com
+        tmweb: tobymackenzie.com
 
 tjm_console:
   name: 'server-tobymackenzie.com'

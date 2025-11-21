@@ -6,12 +6,13 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-// use TJM\TMCom\Service\Sites;
+use TJM\TMCom\Service\Sites;
 use TJM\ShellRunner\ShellRunner;
 
 class DeployCommand extends Command{
 	static public $defaultName = 'deploy';
 	protected string $projectPath;
+	protected $sites;
 	protected $shellRunner;
 	protected string $sitesPath;
 	protected function configure(){
@@ -24,10 +25,12 @@ class DeployCommand extends Command{
 
 	public function __construct(
 		string $projectPath,
+		Sites $sites,
 		ShellRunner $shellRunner,
 		string $sitesPath
 	){
 		$this->projectPath = $projectPath;
+		$this->sites = $sites;
 		$this->shellRunner = $shellRunner;
 		$this->sitesPath = $sitesPath;
 		parent::__construct();
@@ -47,13 +50,10 @@ class DeployCommand extends Command{
 			break;
 		}
 		foreach($input->getArgument('site') as $site){
+			$site = $this->sites->getKey($site);
 			switch($site){
 				//==personal
 				case 'tobymackenzie.com':
-				case 'tm':
-				case 'tmcom':
-				case 'tmweb':
-					$site = 'tobymackenzie.com';
 					$isComposerChanged = $this->isComposerChanged($site, $server);
 					$output->writeln($this->syncSite($site, $server));
 					//-! users should come from config
@@ -68,30 +68,23 @@ class DeployCommand extends Command{
 					}
 				break;
 				case 'dev.tobymackenzie.com':
-				case 'dev':
-					$site = 'dev.tobymackenzie.com';
 					$output->writeln($this->syncSite($site, $server));
 					$output->writeln($this->setSitePermissions($site, $server));
 				break;
 				//==personal - etc
-				case 'priv':
-				case 'private':
 				case 'tmprivate':
-					$site = 'tmprivate';
 					$output->writeln($this->syncSite($site, $server));
 					$output->writeln($this->setSitePermissions($site, $server, [
 						"setfacl -dR -m u:www-data:rwX -m u:2b:rwX var && setfacl -R -m u:www-data:rwX -m u:2b:rwX var"
 						,"setfacl -dR -m u:www-data:rwX -m u:2b:rwX files && setfacl -R -m u:www-data:rwX -m u:2b:rwX files"
 					]));
 				break;
-				case '10kgol':
-					$site = '10k-gol.site';
+				case '10k-gol.site':
 					$output->writeln($this->syncSite($site, $server));
 					$output->writeln($this->setSitePermissions($site, $server));
 				break;
 				//==clients
 				case 'dw':
-					$site = 'dw';
 					$isComposerChanged = $this->isComposerChanged($site, $server);
 					$output->writeln($this->syncSite($site, $server));
 					$output->writeln($this->setSitePermissions($site, $server, [
