@@ -1,14 +1,18 @@
 <?php
 namespace TJM\TMCom\Command;
 use Exception;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(
+	name: 'provision',
+	description: 'Provision server group.'
+)]
 class ProvisionCommand extends Command{
-	static public $defaultName = 'provision';
 	protected string $projectPath;
 	public function __construct(string $projectPath){
 		$this->projectPath = $projectPath;
@@ -16,7 +20,6 @@ class ProvisionCommand extends Command{
 	}
 	protected function configure(){
 		$this
-			->setDescription('Provision server group.')
 			->addArgument('group', InputArgument::REQUIRED, 'Name of server group to provision.  Matches YAML file in "provision" directory.')
 			->addOption('book', 'b', InputOption::VALUE_REQUIRED, 'Run playbook by name, from `provision/plays` folder')
 			->addOption('dry-run', 'd', InputOption::VALUE_NONE, 'Don\'t change anything, just report what changes would be made.')

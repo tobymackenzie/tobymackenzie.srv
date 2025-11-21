@@ -1,6 +1,7 @@
 <?php
 namespace TJM\TMCom\Command;
 use Exception;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -9,15 +10,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TJM\TMCom\Service\Sites;
 use TJM\ShellRunner\ShellRunner;
 
+#[AsCommand(
+	name: 'deploy',
+	description: 'Deploy one or all sites.'
+)]
 class DeployCommand extends Command{
-	static public $defaultName = 'deploy';
 	protected string $projectPath;
 	protected ShellRunner $shellRunner;
 	protected Sites $sites;
 	protected string $sitesPath;
 	protected function configure(){
 		$this
-			->setDescription('Deploy one or all sites.')
 			->addArgument('site', InputArgument::IS_ARRAY, 'Site to deploy.  Matches name of site in sites folder, or an alias.', ['tobymackenzie.com', 'dev.tobymackenzie.com'])
 			->addOption('group', 'g', InputOption::VALUE_REQUIRED, 'Name of server group to deploy to.  Matches YAML file in "provision" directory.', 'public')
 		;

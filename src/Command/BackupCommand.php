@@ -2,14 +2,18 @@
 namespace TJM\TMCom\Command;
 use DateTime;
 use Exception;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(
+	name: 'backup',
+	description: 'Back up server group.'
+)]
 class BackupCommand extends Command{
-	static public $defaultName = 'backup';
 	protected string $projectPath;
 	public function __construct(string $projectPath){
 		$this->projectPath = $projectPath;
@@ -17,7 +21,6 @@ class BackupCommand extends Command{
 	}
 	protected function configure(){
 		$this
-			->setDescription('Back up server group.')
 			->addArgument('group', InputArgument::OPTIONAL, 'Name of server group to back up.  Matches YAML file in "provision" directory.', 'public')
 		;
 	}

@@ -1,6 +1,7 @@
 <?php
 namespace TJM\TMCom\Command;
 use Exception;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -9,14 +10,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TJM\ShellRunner\ShellRunner;
 use TJM\TMCom\Service\Sites;
 
+#[AsCommand(
+	name: 'update',
+	description: 'Update site(s) dependencies (local, must deploy to update prod).'
+)]
 class UpdateCommand extends Command{
-	static public $defaultName = 'update';
 	protected ShellRunner $shellRunner;
 	protected Sites $sites;
 	protected string $sitesPath;
 	protected function configure(){
 		$this
-			->setDescription('Update site(s) dependencies (local, must deploy to update prod).')
 			->addArgument('site', InputArgument::IS_ARRAY, 'Site to update.  Matches name of site in sites folder, or an alias.')
 		;
 	}

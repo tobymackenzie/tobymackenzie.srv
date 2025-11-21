@@ -14,7 +14,6 @@ use TJM\TMCom\Dev;
 	description: 'Control dev server with vagrant'
 )]
 class DevSrvCommand extends Command{
-	static public $defaultName = 'dev:srv';
 	public Dev $devService;
 	public function __construct(Dev $devService){
 		$this->devService = $devService;
@@ -22,7 +21,6 @@ class DevSrvCommand extends Command{
 	}
 	protected function configure(){
 		$this
-			->setDescription('Control dev server with vagrant')
 			->setAliases(['dev', 'vagrant'])
 			->addArgument('do', InputArgument::REQUIRED, 'Vagrant commands to run on server(s).')
 			->addOption('server', 's', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED, 'Name of vagrant server(s) to run commands on.')
