@@ -7,13 +7,24 @@ services:
     autoconfigure: true
     autowire: true
     bind:
+      $backupPaths: ['/Volumes/cx8']
       $projectPath: '%paths.project%'
       $sitesPath: '%paths.sites%'
+      $servers:
+        public:
+          host: tobymackenzie.com
+          user: 2b
+        prod: public
+        dev:
+          env: dev
+          host: deploy.t
+          user: ubuntu
   TJM\ShellRunner\ShellRunner: ~
   TJM\TMCom\Command\:
     resource: '%paths.project%/src/Command'
     tags: ['console.command']
   TJM\TMCom\Dev: ~
+  TJM\TMCom\Servers: ~
   TJM\TMCom\Sites:
     arguments:
       - '%paths.sites%'
