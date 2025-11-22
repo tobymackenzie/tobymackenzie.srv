@@ -9,6 +9,14 @@ services:
     bind:
       $backupPaths: ['/Volumes/cx8']
       $projectPath: '%paths.project%'
+      $siteAliases:
+        10kgol: 10k-gol.site
+        dev: dev.tobymackenzie.com
+        tm: tobymackenzie.com
+        priv: tmprivate
+        private: tmprivate
+        tmcom: tobymackenzie.com
+        tmweb: tobymackenzie.com
       $sitesPath: '%paths.sites%'
       $servers:
         public:
@@ -25,17 +33,7 @@ services:
     tags: ['console.command']
   TJM\TMCom\Dev: ~
   TJM\TMCom\Servers: ~
-  TJM\TMCom\Sites:
-    arguments:
-      - '%paths.sites%'
-      -
-        10kgol: 10k-gol.site
-        dev: dev.tobymackenzie.com
-        tm: tobymackenzie.com
-        priv: tmprivate
-        private: tmprivate
-        tmcom: tobymackenzie.com
-        tmweb: tobymackenzie.com
+  TJM\TMCom\Sites: ~
 
 tjm_console:
   name: 'server-tobymackenzie.com'

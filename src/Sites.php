@@ -3,9 +3,9 @@ namespace TJM\TMCom;
 class Sites{
 	protected array $aliases = [];
 	protected string $sitesPath = __DIR__ . '/../../sites';
-	public function __construct(string $sitesPath, ?array $aliases = null){
-		if($aliases){
-			$this->aliases = $aliases;
+	public function __construct(string $sitesPath, ?array $siteAliases = null){
+		if($siteAliases){
+			$this->aliases = $siteAliases;
 		}
 		$this->sitesPath = $sitesPath;
 	}
