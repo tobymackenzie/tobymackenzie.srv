@@ -125,8 +125,8 @@ class Servers{
 				}
 				//-! users should come from config
 				$result = $this->setSitePermissions($site, $server, [
-					"setfacl -dR -m u:www-data:rwX -m u:2b:rwX var && setfacl -R -m u:www-data:rwX -m u:2b:rwX var"
-					,"setfacl -dR -m u:www-data:rwX -m u:2b:rwX app/files/wp-uploads && setfacl -R -m u:www-data:rwX -m u:2b:rwX app/files/wp-uploads"
+					"setfacl -dR -m u:www-data:rwX -m u:{$server['user']}:rwX var && setfacl -R -m u:www-data:rwX -m u:{$server['user']}:rwX var"
+					,"setfacl -dR -m u:www-data:rwX -m u:{$server['user']}:rwX app/files/wp-uploads && setfacl -R -m u:www-data:rwX -m u:{$server['user']}:rwX app/files/wp-uploads"
 				]);
 				if($output){
 					$output->writeln($result);
@@ -155,8 +155,8 @@ class Servers{
 					$output->writeln($result);
 				}
 				$result = $this->setSitePermissions($site, $server, [
-					"setfacl -dR -m u:www-data:rwX -m u:2b:rwX var && setfacl -R -m u:www-data:rwX -m u:2b:rwX var"
-					,"setfacl -dR -m u:www-data:rwX -m u:2b:rwX files && setfacl -R -m u:www-data:rwX -m u:2b:rwX files"
+					"setfacl -dR -m u:www-data:rwX -m u:{$server['user']}:rwX var && setfacl -R -m u:www-data:rwX -m u:{$server['user']}:rwX var"
+					,"setfacl -dR -m u:www-data:rwX -m u:{$server['user']}:rwX files && setfacl -R -m u:www-data:rwX -m u:{$server['user']}:rwX files"
 				]);
 				if($output){
 					$output->writeln($result);
@@ -233,7 +233,7 @@ class Servers{
 	}
 	protected function setSitePermissions($site, $server, $additional = null){
 		//-! user / group should come from config
-		$command = "sudo chown -R 2b:2b .";
+		$command = "sudo chown -R {$server['user']}:{$server['user']} .";
 		$command .= " && sudo find . -type f -exec chmod go-wx {} \+";
 		$command .= " && sudo find . -type d -exec chmod go-w {} \+";
 		if($additional){
