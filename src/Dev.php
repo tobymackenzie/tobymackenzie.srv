@@ -4,6 +4,13 @@ use TJM\ShellRunner\ShellRunner;
 use TJM\TMCom\Dev;
 use TJM\TMCom\Sites;
 class Dev{
+	const SRV_ALIASES = [
+		'down'=> 'halt',
+		'shell'=> 'ssh',
+		'stat'=> 'status',
+		'stop'=> 'halt',
+		'sync'=> 'rsync',
+	];
 	protected ShellRunner $shellRunner;
 	protected Sites $sites;
 	protected string $path = __DIR__ . '/..';
@@ -97,6 +104,9 @@ class Dev{
 	public function controlSrv(array|string $server, string $do, bool $interactive = true){
 		if(is_array($server)){
 			$server = implode(' ', $server);
+		}
+		if(!empty(self::SRV_ALIASES[$do])){
+			$do = self::SRV_ALIASES[$do];
 		}
 		$cmd = 'cd ' . escapeshellarg($this->path) . ' && vagrant ' . $do . ' ' . $server;
 		if($interactive){
