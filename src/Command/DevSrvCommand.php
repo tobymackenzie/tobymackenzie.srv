@@ -10,7 +10,7 @@ use TJM\TMCom\Dev;
 
 #[AsCommand(
 	name: 'dev:srv',
-	aliases: ['dev', 'vagrant'],
+	aliases: ['dev', 'vagrant', 'srv', 'srv:build', 'srv:deploy', 'srv:web'],
 	description: 'Control dev server with vagrant'
 )]
 class DevSrvCommand extends Command{
@@ -27,7 +27,12 @@ class DevSrvCommand extends Command{
 		;
 	}
 	protected function execute(InputInterface $input, OutputInterface $output){
-		$this->devService->controlSrv($input->getOption('server'), $input->getArgument('do'));
+		$command = $input->getArgument('command');
+		$server = $input->getOption('server');
+		if(substr($command, 0, 4) === 'srv:'){
+			$server[] = substr($command, 4);
+		}
+		$this->devService->controlSrv($server, $input->getArgument('do'));
 		return 0;
 	}
 }
