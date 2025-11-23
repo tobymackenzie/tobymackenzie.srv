@@ -99,6 +99,10 @@ class Dev{
 			return shell_exec($cmd);
 		}
 	}
+	public function isSrvRunning(string $server){
+		$output = $this->controlSrv($server, 'status', false);
+		return strpos($output, 'is running') !== false;
+	}
 	public function srvStatus(array|string $server){
 		$this->controlSrv($server, 'status');
 	}
