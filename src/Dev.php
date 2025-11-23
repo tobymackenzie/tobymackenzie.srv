@@ -28,11 +28,11 @@ class Dev{
 		array $tasks = []
 	){
 		$site = $this->sites->getKey($site);
-			if($site === '10k-gol.site'){
-				$command = 'bin/build ' . implode(' ', $tasks);
-			}else{
-				$command = "bin/console build";
-				foreach($tasks as $task){
+		if($site === '10k-gol.site'){
+			$command = 'bin/build ' . implode(' ', $tasks);
+		}else{
+			$command = "bin/console build";
+			foreach($tasks as $task){
 				if($task){
 					$command .= ' -t ' . $task;
 				}
