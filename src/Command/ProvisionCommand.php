@@ -7,20 +7,21 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use TJM\TMCom\Servers;
 
 #[AsCommand(
 	name: 'provision',
 	description: 'Provision server group.'
 )]
 class ProvisionCommand extends Command{
-	protected string $projectPath;
-	public function __construct(string $projectPath){
-		$this->projectPath = $projectPath;
+	protected Servers $servers;
+	public function __construct(Servers $serversService){
+		$this->servers = $serversService;
 		parent::__construct();
 	}
 	protected function configure(){
 		$this
-			->addArgument('group', InputArgument::REQUIRED, 'Name of server group to provision.  Matches YAML file in "provision" directory.')
+			->addArgument('group', InputArgument::REQUIRED, 'Name of server group to provision.  Matches YAML file in "provision" directory (public or dev).')
 			->addOption('book', 'b', InputOption::VALUE_REQUIRED, 'Run playbook by name, from `provision/plays` folder')
 			->addOption('dry-run', 'd', InputOption::VALUE_NONE, 'Don\'t change anything, just report what changes would be made.')
 			->addOption('list-tasks', 'l', InputOption::VALUE_NONE, 'List tasks instead of run them')
@@ -28,38 +29,15 @@ class ProvisionCommand extends Command{
 		;
 	}
 	protected function execute(InputInterface $input, OutputInterface $output){
-		chdir($this->projectPath);
-		$group = $input->getArgument('group');
-		switch($group){
-			case 'dev':
-				passthru('vagrant provision');
-			break;
-			case 'public':
-				if($input->getOption('book')){
-					$book = $this->projectPath . "/provision/plays/{$input->getOption('book')}.yml";
-				}else{
-					$book = $this->projectPath . "/provision/{$group}.yml";
-				}
-				$inventoryFile = $this->projectPath . "/provision/hosts/{$group}.yml";
-				$command = "ansible-playbook --diff -i {$inventoryFile}";
-				if($input->getOption('dry-run')){
-					$command .= ' --check';
-				}
-				if($input->getOption('list-tasks')){
-					$command .= ' --list-tasks';
-				}
-				if($input->getOption('start-at-task')){
-					$command .= ' --start-at-task "' . $input->getOption('start-at-task') . '"';
-				}
-				$command .= " {$book}";
-				passthru($command, $return);
-				if($return){
-					throw new Exception("provisioning failed: running \`{$command}\`");
-				}
-			break;
-			default:
-				throw new Exception("Provisioning group '{$group}' not implemented.");
-			break;
+		if($input->getArgument('group') === 'public'){
+			$this->servers->provision(
+				book: $input->getOption('book'),
+				dryRun: $input->getOption('dry-run'),
+				listTasks: $input->getOption('list-tasks'),
+				startAtTask: $input->getOption('start-at-task')
+			);
+		}else{
+			$this->dev->provision();
 		}
 		return 0;
 	}

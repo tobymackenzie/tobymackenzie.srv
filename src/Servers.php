@@ -286,4 +286,34 @@ class Servers{
 		}
 		return implode("\n", $result);
 	}
+
+	//--provision
+	public function provision(
+		?string $book = null,
+		bool $dryRun = false,
+		bool $listTasks = false,
+		?string $startAtTask = null
+	){
+		if($book){
+			$book = $this->projectPath . "/provision/plays/{$book}.yml";
+		}else{
+			$book = $this->projectPath . "/provision/{$group}.yml";
+		}
+		$inventoryFile = $this->projectPath . "/provision/hosts/{$group}.yml";
+		$command = "ansible-playbook --diff -i {$inventoryFile}";
+		if($dryRun){
+			$command .= ' --check';
+		}
+		if($listTasks){
+			$command .= ' --list-tasks';
+		}
+		if($startAtTask){
+			$command .= ' --start-at-task "' . $startAtTask . '"';
+		}
+		$command .= " {$book}";
+		passthru($command, $return);
+		if($return){
+			throw new Exception("provisioning failed: running \`{$command}\`");
+		}
+	}
 }
