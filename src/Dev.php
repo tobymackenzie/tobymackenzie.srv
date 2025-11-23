@@ -88,11 +88,16 @@ class Dev{
 	/*=====
 	==server
 	=====*/
-	public function controlSrv(array|string $server, string $do){
+	public function controlSrv(array|string $server, string $do, bool $interactive = true){
 		if(is_array($server)){
 			$server = implode(' ', $server);
 		}
-		passthru('cd ' . escapeshellarg($this->path) . ' && vagrant ' . $do . ' ' . $server);
+		$cmd = 'cd ' . escapeshellarg($this->path) . ' && vagrant ' . $do . ' ' . $server;
+		if($interactive){
+			passthru($cmd);
+		}else{
+			return shell_exec($cmd);
+		}
 	}
 	public function srvStatus(array|string $server){
 		$this->controlSrv($server, 'status');
