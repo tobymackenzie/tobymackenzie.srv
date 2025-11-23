@@ -28,6 +28,9 @@ class Dev{
 		array $tasks = []
 	){
 		$site = $this->sites->getKey($site);
+		if(!$this->isSrvRunning('build')){
+			$this->startSrv('build');
+		}
 		if($site === '10k-gol.site'){
 			$command = 'bin/build ' . implode(' ', $tasks);
 		}else{
@@ -72,6 +75,9 @@ class Dev{
 	public function update(string $site, bool $interactive = false){
 		$site = $this->sites->getKey($site);
 		if($this->sites->hasComposer($site)){
+			if(!$this->isSrvRunning('dev')){
+				$this->startSrv('dev');
+			}
 			$command = "sudo fallocate -l 2G /tmp/_swapfile && sudo chmod 600 /tmp/_swapfile && sudo mkswap /tmp/_swapfile && sudo swapon /tmp/_swapfile && php -d memory_limit=-1 `which composer` update; sudo swapoff /tmp/_swapfile && sudo rm -f /tmp/_swapfile";
 			if(!$interactive){
 				$command = "export COMPOSER_DISCARD_CHANGES='stash' && {$command}";
