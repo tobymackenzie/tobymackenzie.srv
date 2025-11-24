@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use TJM\TMCom\Dev;
 use TJM\TMCom\Servers;
 
 #[AsCommand(
@@ -14,8 +15,10 @@ use TJM\TMCom\Servers;
 	description: 'Provision server group.'
 )]
 class ProvisionCommand extends Command{
+	protected Dev $dev;
 	protected Servers $servers;
-	public function __construct(Servers $serversService){
+	public function __construct(Dev $dev, Servers $serversService){
+		$this->dev = $dev;
 		$this->servers = $serversService;
 		parent::__construct();
 	}
