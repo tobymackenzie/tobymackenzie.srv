@@ -10,4 +10,7 @@
 		,"tjm/shell-runner": "^0"
 		,"tjm/sy-console": "^3.0"
 	}
+	,"require-dev": {
+		"tjm/dev": "*"
+	}
 }
