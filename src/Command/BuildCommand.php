@@ -46,6 +46,11 @@ class BuildCommand extends Base{
 		}else{
 			array_unshift($tasks, $command[1]);
 		}
+		$verbosity = $output->getVerbosity();
+		//--default to verbose
+		if($verbosity === 32){
+			$verbosity = true;
+		}
 		foreach($input->getArgument('site') as $site){
 			$this->dev->build(
 				site: $site,
@@ -53,7 +58,7 @@ class BuildCommand extends Base{
 				force: $input->getOption('force'),
 				interactive: $input->isInteractive(),
 				tasks: $tasks,
-				verbosity: $output->getVerbosity()
+				verbosity: $verbosity
 			);
 		}
 		return 0;

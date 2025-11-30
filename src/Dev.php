@@ -33,7 +33,7 @@ class Dev{
 		bool $force = false,
 		bool $interactive = false,
 		array $tasks = [],
-		int|bool $verbosity = true
+		int|bool $verbosity = false
 	){
 		$site = $this->sites->getKey($site);
 		if(!$this->isSrvRunning('build')){
