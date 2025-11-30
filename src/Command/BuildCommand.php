@@ -52,7 +52,8 @@ class BuildCommand extends Base{
 				dist: $input->getOption('dist'),
 				force: $input->getOption('force'),
 				interactive: $input->isInteractive(),
-				tasks: $tasks
+				tasks: $tasks,
+				verbosity: $output->getVerbosity()
 			);
 		}
 		return 0;

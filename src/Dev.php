@@ -32,7 +32,8 @@ class Dev{
 		?string $dist = null,
 		bool $force = false,
 		bool $interactive = false,
-		array $tasks = []
+		array $tasks = [],
+		int|bool $verbosity = true
 	){
 		$site = $this->sites->getKey($site);
 		if(!$this->isSrvRunning('build')){
@@ -52,6 +53,15 @@ class Dev{
 			}
 			if($force){
 				$command .= ' -f';
+			}
+			if($verbosity === true || $verbosity > 32){
+				if($verbosity > 128){
+					$command .= ' -vvv';
+				}elseif($verbosity > 64){
+					$command .= ' -vv';
+				}else{
+					$command .= ' -v';
+				}
 			}
 		}
 		$this->shellRunner->run([
