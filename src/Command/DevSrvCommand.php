@@ -21,7 +21,6 @@ class DevSrvCommand extends Command{
 	}
 	protected function configure(){
 		$this
-			->setAliases(['dev', 'vagrant'])
 			->addArgument('do', InputArgument::REQUIRED, 'Vagrant commands to run on server(s).')
 			->addOption('server', 's', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED, 'Name of vagrant server(s) to run commands on.')
 		;
