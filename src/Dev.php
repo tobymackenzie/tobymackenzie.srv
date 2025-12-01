@@ -11,14 +11,23 @@ class Dev{
 		'stop'=> 'halt',
 		'sync'=> 'rsync',
 	];
+	protected string $adminUser;
+	protected string $buildSrv;
+	protected string $devSrv;
 	protected ShellRunner $shellRunner;
 	protected Sites $sites;
 	protected string $path = __DIR__ . '/..';
 	public function __construct(
 		string $projectPath,
 		ShellRunner $shellRunner,
-		Sites $sites
+		Sites $sites,
+		string $adminUser,
+		string $buildSrv,
+		string $devSrv
 	){
+		$this->adminUser = $adminUser;
+		$this->buildSrv = $buildSrv;
+		$this->devSrv = $devSrv;
 		$this->path = $projectPath;
 		$this->shellRunner = $shellRunner;
 		$this->sites = $sites;
@@ -66,7 +75,7 @@ class Dev{
 		}
 		$this->shellRunner->run([
 			'command'=> $command,
-			"host"=> '2b@192.168.56.7',
+			"host"=> $this->adminUser . '@' . $this->buildSrv,
 			'interactive'=> $interactive,
 			"path"=> "/var/www/sites/{$site}/",
 		]);
@@ -101,14 +110,14 @@ class Dev{
 			}
 			$this->shellRunner->run([
 				'command'=> $command,
-				"host"=> '2b@tm.t',
+				"host"=> $this->adminUser . '@' . $this->devSrv,
 				'interactive'=> $interactive,
 				"path"=> "/var/www/sites/{$site}/",
 			]);
 		}
 	}
 
-	/*=====
+	/*====
 	==server
 	=====*/
 	public function controlSrv(array|string $server, string $do, bool $interactive = true){
