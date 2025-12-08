@@ -60,10 +60,9 @@ class Servers{
 				}
 				continue;
 			}
-			continue;
 			foreach([
 				'db'=> [
-					'dest'=> "{$destPath}/tmcom/db"
+					'dest'=> "{$destPath}/db"
 					,'pre'=> "ssh {$server['ssh']} \"sudo -u backup /home/backup/bin/db-backup\""
 					,'src'=> '/var/bu/db/'
 				]
@@ -73,12 +72,12 @@ class Servers{
 				]
 				//-! should store all sites files in shared location to easily backup
 				,'tmcom files'=> [
-					'dest'=> "{$destPath}/tmcom/tmfiles"
+					'dest'=> "{$destPath}/tmfiles"
 					,'src'=> '/var/www/sites/tobymackenzie.com/app/files/'
 				]
 				,'wrk'=> [
 					'customOpts'=> '--exclude="/.*" --exclude="/bu/"'
-					,'dest'=> "{$destPath}/tmcom/cog"
+					,'dest'=> "{$destPath}/cog"
 					,'src'=> '/home/cog/'
 				]
 			] as $name=> $config){
