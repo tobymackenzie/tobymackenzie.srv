@@ -9,3 +9,4 @@
 - import_playbook: https.yml
 - import_playbook: web-config.yml
 - import_playbook: dbBackup.yml
+- import_playbook: memory.yml

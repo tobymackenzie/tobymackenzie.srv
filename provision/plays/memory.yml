@@ -1,0 +1,28 @@
+#-@ https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-20-04
+- name: set up swap file
+  become: true
+  hosts: all
+  tasks:
+    - name: create swap file
+      shell:
+        cmd: fallocate -l 2G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
+        creates: /swapfile
+    - name: configure swap fstab
+      lineinfile:
+        dest: /etc/fstab
+        line: '/swapfile none swap sw 0 0'
+        regexp: '^.*/swapfile.*$'
+        state: present
+    - name: configure swapiness
+      lineinfile:
+        dest: /etc/sysctl.conf
+        line: 'vm.swappiness = 10'
+        regexp: '^.*vm.swappiness.*$'
+        state: present
+    - name: configure cache pressure
+      lineinfile:
+        dest: /etc/sysctl.conf
+        line: 'vm.vfs_cache_pressure = 50'
+        regexp: '^.*vm.vfs_cache_pressure.*$'
+        state: present
+
