@@ -14,6 +14,7 @@ services:
       $devSrv: tm.t
       $projectPath: '%paths.project%'
       $siteAliases:
+        10k: 10k-gol.site
         10kgol: 10k-gol.site
         dev: dev.tobymackenzie.com
         tm: tobymackenzie.com
