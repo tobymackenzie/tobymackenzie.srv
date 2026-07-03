@@ -61,15 +61,15 @@ sites:
     httpsCert: tobymackenzie.com
     name: www.tobymackenzie.com
     aliases:
-      - t.www.tobymackenzie.com
       - deploy.t
+      - tm.t
     webroot: /tobymackenzie.com/dist/public/
     sort: 0
   dev.tobymackenzie.com:
     accessLog: tmdev
     aliases:
-      - t.dev.tobymackenzie.com
       - dev.macn.me
+      - dev.t
     https: true
     httpsCert: dev.tobymackenzie.com
     webroot: /dev.tobymackenzie.com
@@ -78,6 +78,8 @@ sites:
     https: true
     httpsCert: tobymackenzie.com
     name: macn.me
+    aliases:
+      - macn.t
     webroot: /tobymackenzie.com/dist/short/
   public-alias-direct:
     accessLog: tmpublic
